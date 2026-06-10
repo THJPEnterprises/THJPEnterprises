@@ -3,1838 +3,327 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>THJP Enterprises Pty Ltd – Australian Woodworking Importer & Distributor</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bark:    #2C1A0E;
-    --timber:  #5C3317;
-    --oak:     #8B5E3C;
-    --grain:   #C4956A;
-    --sand:    #E8D5BC;
-    --cream:   #F5EDE0;
-    --parchment: #FAF5EE;
-    --sage:    #4A5940;
-    --moss:    #7A8C6E;
-    --gold:    #B8860B;
-    --ivory:   #FFFDF8;
-    --charcoal:#1A1410;
-
-    --font-display: 'Cormorant Garamond', Georgia, serif;
-    --font-body: 'DM Sans', sans-serif;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: var(--font-body);
-    background: var(--ivory);
-    color: var(--charcoal);
-    overflow-x: hidden;
-    line-height: 1.6;
-  }
-
-  /* ─── NAV ─── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    background: rgba(44, 26, 14, 0.96);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(196, 149, 106, 0.25);
-    padding: 0 5vw;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 72px;
-  }
-
-  .nav-logo {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    text-decoration: none;
-  }
-
-  .nav-logo img {
-    height: 44px;
-    width: auto;
-    object-fit: contain;
-    filter: brightness(1.1);
-  }
-
-  .nav-logo-text {
-    font-family: var(--font-display);
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: var(--sand);
-    letter-spacing: 0.04em;
-    line-height: 1.2;
-  }
-
-  .nav-logo-text span {
-    display: block;
-    font-size: 0.65rem;
-    font-weight: 300;
-    font-family: var(--font-body);
-    color: var(--grain);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    list-style: none;
-  }
-
-  .nav-links a {
-    display: block;
-    padding: 8px 22px;
-    color: var(--sand);
-    text-decoration: none;
-    font-size: 0.8rem;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    transition: color 0.2s;
-    border-right: 1px solid rgba(196, 149, 106, 0.15);
-  }
-
-  .nav-links li:first-child a { border-left: 1px solid rgba(196, 149, 106, 0.15); }
-
-  .nav-links a:hover,
-  .nav-links a.active { color: var(--grain); }
-
-  .nav-links a.cta {
-    background: var(--grain);
-    color: var(--bark);
-    border-radius: 2px;
-    margin-left: 12px;
-    border: none;
-    font-weight: 500;
-  }
-
-  .nav-links a.cta:hover { background: var(--sand); }
-
-  /* ─── PAGES ─── */
-  .page { display: none; padding-top: 72px; }
-  .page.active { display: block; }
-
-  /* ─── HOME ─── */
-  .hero {
-    position: relative;
-    height: calc(100vh - 72px);
-    min-height: 600px;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    background: var(--bark);
-  }
-
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 70% 50%, rgba(139, 94, 60, 0.18) 0%, transparent 60%),
-      linear-gradient(135deg, #1A0E06 0%, #2C1A0E 40%, #3D2210 100%);
-  }
-
-  /* Wood grain SVG texture overlay */
-  .hero-grain {
-    position: absolute;
-    inset: 0;
-    opacity: 0.06;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.015 0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1' fill='%23C4956A'/%3E%3C/svg%3E");
-    background-size: 300px 300px;
-  }
-
-  .hero-ring {
-    position: absolute;
-    right: -5vw;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 55vw;
-    max-width: 700px;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    border: 1px solid rgba(196, 149, 106, 0.12);
-    box-shadow: inset 0 0 0 40px rgba(196, 149, 106, 0.03),
-                inset 0 0 0 120px rgba(196, 149, 106, 0.02);
-  }
-
-  .hero-ring::before {
-    content: '';
-    position: absolute;
-    inset: 40px;
-    border-radius: 50%;
-    border: 1px solid rgba(196, 149, 106, 0.1);
-  }
-
-  .hero-ring::after {
-    content: '';
-    position: absolute;
-    inset: 100px;
-    border-radius: 50%;
-    border: 1px solid rgba(196, 149, 106, 0.08);
-  }
-
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    padding: 0 10vw;
-    max-width: 680px;
-    animation: fadeUp 0.9s ease both;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(28px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .hero-eyebrow {
-    font-family: var(--font-body);
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--grain);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .hero-eyebrow::before {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 1px;
-    background: var(--grain);
-  }
-
-  .hero h1 {
-    font-family: var(--font-display);
-    font-size: clamp(3rem, 6vw, 5.5rem);
-    font-weight: 600;
-    color: var(--sand);
-    line-height: 1.05;
-    margin-bottom: 1.5rem;
-  }
-
-  .hero h1 em {
-    color: var(--grain);
-    font-style: italic;
-  }
-
-  .hero-sub {
-    font-size: 1.05rem;
-    color: rgba(232, 213, 188, 0.7);
-    font-weight: 300;
-    max-width: 460px;
-    margin-bottom: 2.5rem;
-    line-height: 1.7;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
-  .btn-primary {
-    display: inline-block;
-    padding: 13px 30px;
-    background: var(--grain);
-    color: var(--bark);
-    text-decoration: none;
-    font-size: 0.8rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border-radius: 2px;
-    transition: background 0.2s, transform 0.15s;
-    cursor: pointer;
-    border: none;
-  }
-
-  .btn-primary:hover { background: var(--sand); transform: translateY(-1px); }
-
-  .btn-outline {
-    display: inline-block;
-    padding: 13px 30px;
-    background: transparent;
-    color: var(--sand);
-    text-decoration: none;
-    font-size: 0.8rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border-radius: 2px;
-    border: 1px solid rgba(232, 213, 188, 0.3);
-    transition: border-color 0.2s, color 0.2s;
-    cursor: pointer;
-  }
-
-  .btn-outline:hover { border-color: var(--grain); color: var(--grain); }
-
-  .hero-scroll {
-    position: absolute;
-    bottom: 2rem;
-    left: 10vw;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: rgba(196, 149, 106, 0.5);
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    animation: fadeUp 0.9s 0.3s ease both;
-  }
-
-  .scroll-line {
-    width: 1px;
-    height: 50px;
-    background: linear-gradient(to bottom, transparent, rgba(196, 149, 106, 0.4));
-    animation: scrollPulse 2s ease-in-out infinite;
-  }
-
-  @keyframes scrollPulse {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
-  }
-
-  /* ─── PILLARS STRIP ─── */
-  .pillars {
-    background: var(--cream);
-    border-top: 1px solid rgba(139, 94, 60, 0.15);
-    border-bottom: 1px solid rgba(139, 94, 60, 0.15);
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .pillar {
-    padding: 3rem 2.5rem;
-    border-right: 1px solid rgba(139, 94, 60, 0.15);
-    transition: background 0.2s;
-  }
-
-  .pillar:last-child { border-right: none; }
-  .pillar:hover { background: var(--sand); }
-
-  .pillar-icon {
-    width: 36px;
-    height: 36px;
-    margin-bottom: 1.2rem;
-    color: var(--oak);
-  }
-
-  .pillar h3 {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--bark);
-    margin-bottom: 0.6rem;
-  }
-
-  .pillar p {
-    font-size: 0.82rem;
-    color: var(--oak);
-    line-height: 1.6;
-  }
-
-  /* ─── SECTION SHARED ─── */
-  section {
-    padding: 7rem 10vw;
-  }
-
-  .section-label {
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--grain);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 1.5rem;
-  }
-
-  .section-label::before {
-    content: '';
-    width: 28px;
-    height: 1px;
-    background: var(--grain);
-  }
-
-  h2.display {
-    font-family: var(--font-display);
-    font-size: clamp(2.2rem, 4vw, 3.4rem);
-    font-weight: 600;
-    color: var(--bark);
-    line-height: 1.1;
-    margin-bottom: 1.5rem;
-  }
-
-  h2.display em { color: var(--oak); font-style: italic; }
-
-  .section-lead {
-    font-size: 1rem;
-    color: var(--oak);
-    max-width: 560px;
-    line-height: 1.75;
-  }
-
-  /* ─── HOME ABOUT TEASER ─── */
-  .home-about {
-    background: var(--parchment);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    padding: 0;
-  }
-
-  .home-about-text {
-    padding: 7rem 6vw 7rem 10vw;
-  }
-
-  .home-about-visual {
-    background: var(--bark);
-    position: relative;
-    overflow: hidden;
-    min-height: 500px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .wood-rings-svg {
-    opacity: 0.35;
-  }
-
-  .home-about-stat {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    background: rgba(139, 94, 60, 0.2);
-    margin-top: 3rem;
-    border: 1px solid rgba(139, 94, 60, 0.2);
-  }
-
-  .stat-box {
-    background: var(--parchment);
-    padding: 1.5rem 1.8rem;
-  }
-
-  .stat-number {
-    font-family: var(--font-display);
-    font-size: 2.4rem;
-    font-weight: 700;
-    color: var(--bark);
-    line-height: 1;
-    margin-bottom: 0.3rem;
-  }
-
-  .stat-label {
-    font-size: 0.72rem;
-    color: var(--oak);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  /* ─── HOME PRODUCTS TEASER ─── */
-  .products-teaser {
-    background: var(--ivory);
-  }
-
-  .products-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: rgba(139, 94, 60, 0.15);
-    border: 1px solid rgba(139, 94, 60, 0.15);
-    margin-top: 3.5rem;
-  }
-
-  .product-card {
-    background: var(--ivory);
-    padding: 2.5rem 2rem;
-    transition: background 0.2s;
-  }
-
-  .product-card:hover { background: var(--cream); }
-
-  .product-card-icon {
-    width: 48px;
-    height: 48px;
-    background: var(--cream);
-    border: 1px solid rgba(139, 94, 60, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-    color: var(--oak);
-  }
-
-  .product-card h3 {
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--bark);
-    margin-bottom: 0.6rem;
-  }
-
-  .product-card p {
-    font-size: 0.82rem;
-    color: var(--oak);
-    line-height: 1.6;
-  }
-
-  /* ─── CTA BAND ─── */
-  .cta-band {
-    background: var(--bark);
-    padding: 5rem 10vw;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 3rem;
-    flex-wrap: wrap;
-  }
-
-  .cta-band h2 {
-    font-family: var(--font-display);
-    font-size: clamp(1.8rem, 3vw, 2.8rem);
-    font-weight: 600;
-    color: var(--sand);
-    line-height: 1.15;
-    max-width: 520px;
-  }
-
-  .cta-band h2 em { color: var(--grain); font-style: italic; }
-
-  /* ─── ABOUT PAGE ─── */
-  .about-hero {
-    background: var(--bark);
-    padding: 6rem 10vw 5rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .page-hero-grain {
-    position: absolute;
-    inset: 0;
-    opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.015 0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1' fill='%23C4956A'/%3E%3C/svg%3E");
-    background-size: 300px 300px;
-  }
-
-  .page-hero-content { position: relative; z-index: 1; }
-
-  .page-eyebrow {
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--grain);
-    margin-bottom: 1.2rem;
-  }
-
-  .page-title {
-    font-family: var(--font-display);
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
-    font-weight: 600;
-    color: var(--sand);
-    line-height: 1.05;
-  }
-
-  .page-title em { color: var(--grain); font-style: italic; }
-
-  .page-subtitle {
-    font-size: 1rem;
-    color: rgba(232, 213, 188, 0.65);
-    max-width: 550px;
-    margin-top: 1.2rem;
-    line-height: 1.7;
-    font-weight: 300;
-  }
-
-  /* About sections */
-  .about-overview {
-    background: var(--parchment);
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 6vw;
-    align-items: start;
-  }
-
-  .about-body h3 {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--bark);
-    margin: 2rem 0 0.7rem;
-  }
-
-  .about-body h3:first-child { margin-top: 0; }
-
-  .about-body p {
-    font-size: 0.9rem;
-    color: #4A3728;
-    line-height: 1.8;
-    margin-bottom: 0.8rem;
-  }
-
-  .about-sidebar {
-    background: var(--bark);
-    padding: 2.5rem;
-    border-radius: 2px;
-    position: sticky;
-    top: 100px;
-  }
-
-  .about-sidebar h3 {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--sand);
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(196, 149, 106, 0.25);
-  }
-
-  .sidebar-item {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    margin-bottom: 1.2rem;
-  }
-
-  .sidebar-dot {
-    width: 6px;
-    height: 6px;
-    background: var(--grain);
-    border-radius: 50%;
-    margin-top: 7px;
-    flex-shrink: 0;
-  }
-
-  .sidebar-item p {
-    font-size: 0.82rem;
-    color: rgba(232, 213, 188, 0.75);
-    line-height: 1.6;
-  }
-
-  .about-values {
-    background: var(--ivory);
-    padding: 7rem 10vw;
-  }
-
-  .values-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-top: 3rem;
-  }
-
-  .value-card {
-    padding: 2rem;
-    background: var(--cream);
-    border: 1px solid rgba(139, 94, 60, 0.15);
-    border-top: 3px solid var(--grain);
-  }
-
-  .value-card h3 {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--bark);
-    margin-bottom: 0.6rem;
-  }
-
-  .value-card p {
-    font-size: 0.82rem;
-    color: var(--oak);
-    line-height: 1.65;
-  }
-
-  .about-model {
-    background: var(--sand);
-    padding: 7rem 10vw;
-  }
-
-  .model-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1px;
-    background: rgba(139, 94, 60, 0.2);
-    border: 1px solid rgba(139, 94, 60, 0.2);
-    margin-top: 3rem;
-  }
-
-  .model-block {
-    background: var(--sand);
-    padding: 2.5rem;
-    transition: background 0.2s;
-  }
-
-  .model-block:hover { background: var(--cream); }
-
-  .model-block h3 {
-    font-family: var(--font-display);
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--bark);
-    margin-bottom: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .model-block h3 .num {
-    font-family: var(--font-body);
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--grain);
-    background: var(--bark);
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .model-block p {
-    font-size: 0.84rem;
-    color: #5A3E2B;
-    line-height: 1.7;
-  }
-
-  /* ─── BRANDS PAGE ─── */
-  .brands-hero { background: var(--sage); }
-  .brands-hero .page-title { color: var(--cream); }
-  .brands-hero .page-eyebrow { color: rgba(196, 213, 175, 0.8); }
-  .brands-hero .page-subtitle { color: rgba(232, 213, 188, 0.6); }
-
-  .brands-intro {
-    background: var(--parchment);
-    padding: 6rem 10vw;
-  }
-
-  .brands-intro-inner {
-    max-width: 700px;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .brands-intro-inner p {
-    font-size: 1.05rem;
-    color: #4A3728;
-    line-height: 1.85;
-  }
-
-  .brands-list {
-    background: var(--ivory);
-    padding: 6rem 10vw;
-  }
-
-  .brand-card {
-    display: grid;
-    grid-template-columns: 1fr 1.6fr;
-    gap: 0;
-    border: 1px solid rgba(139, 94, 60, 0.2);
-    margin-bottom: 2rem;
-    background: var(--cream);
-    overflow: hidden;
-  }
-
-  .brand-card-visual {
-    background: var(--bark);
-    padding: 3.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
-    min-height: 340px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .brand-card-grain {
-    position: absolute;
-    inset: 0;
-    opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.015 0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1' fill='%23C4956A'/%3E%3C/svg%3E");
-    background-size: 250px 250px;
-  }
-
-  .brand-logo-placeholder {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-  }
-
-  .brand-logo-placeholder .brand-name-large {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--sand);
-    letter-spacing: 0.04em;
-  }
-
-  .brand-logo-placeholder .brand-tagline {
-    font-size: 0.7rem;
-    color: var(--grain);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-top: 0.5rem;
-  }
-
-  .brand-badge {
-    position: relative;
-    z-index: 1;
-    display: inline-block;
-    padding: 5px 14px;
-    border: 1px solid rgba(196, 149, 106, 0.35);
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--grain);
-    border-radius: 100px;
-  }
-
-  .brand-card-content {
-    padding: 3.5rem;
-  }
-
-  .brand-card-content .brand-tag {
-    display: inline-block;
-    background: var(--bark);
-    color: var(--grain);
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 100px;
-    margin-bottom: 1.5rem;
-  }
-
-  .brand-card-content h2 {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--bark);
-    margin-bottom: 1rem;
-    line-height: 1.15;
-  }
-
-  .brand-card-content p {
-    font-size: 0.88rem;
-    color: #4A3728;
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
-  }
-
-  .brand-features {
-    list-style: none;
-    margin-bottom: 2rem;
-  }
-
-  .brand-features li {
-    font-size: 0.82rem;
-    color: var(--oak);
-    padding: 0.45rem 0;
-    border-bottom: 1px solid rgba(139, 94, 60, 0.12);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .brand-features li::before {
-    content: '';
-    width: 18px;
-    height: 1px;
-    background: var(--grain);
-    flex-shrink: 0;
-  }
-
-  .brand-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--bark);
-    text-decoration: none;
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border-bottom: 1px solid var(--grain);
-    padding-bottom: 2px;
-    transition: color 0.2s;
-  }
-
-  .brand-link:hover { color: var(--grain); }
-
-  .brands-coming {
-    background: var(--cream);
-    padding: 5rem 10vw;
-    text-align: center;
-  }
-
-  .brands-coming h3 {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--bark);
-    margin-bottom: 1rem;
-  }
-
-  .brands-coming p {
-    font-size: 0.9rem;
-    color: var(--oak);
-    max-width: 460px;
-    margin: 0 auto 2rem;
-    line-height: 1.7;
-  }
-
-  /* ─── CONTACT PAGE ─── */
-  .contact-hero { background: var(--timber); }
-  .contact-hero .page-title { color: var(--sand); }
-
-  .contact-body {
-    background: var(--parchment);
-    display: grid;
-    grid-template-columns: 1fr 1.4fr;
-    gap: 0;
-    min-height: 70vh;
-  }
-
-  .contact-sidebar {
-    padding: 6rem 5vw 6rem 10vw;
-    background: var(--bark);
-  }
-
-  .contact-sidebar h2 {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--sand);
-    margin-bottom: 1rem;
-    line-height: 1.2;
-  }
-
-  .contact-sidebar p {
-    font-size: 0.86rem;
-    color: rgba(232, 213, 188, 0.65);
-    line-height: 1.75;
-    margin-bottom: 2.5rem;
-  }
-
-  .contact-methods {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .contact-method {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.2rem 1.5rem;
-    border: 1px solid rgba(196, 149, 106, 0.2);
-    transition: border-color 0.2s;
-    text-decoration: none;
-  }
-
-  .contact-method:hover { border-color: var(--grain); }
-
-  .contact-method-icon {
-    width: 40px;
-    height: 40px;
-    background: rgba(196, 149, 106, 0.12);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    color: var(--grain);
-  }
-
-  .contact-method-text .label {
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--grain);
-    margin-bottom: 3px;
-  }
-
-  .contact-method-text .value {
-    font-size: 0.88rem;
-    color: var(--sand);
-    font-weight: 400;
-  }
-
-  .contact-social {
-    margin-top: 2.5rem;
-    display: flex;
-    gap: 1rem;
-  }
-
-  .social-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border: 1px solid rgba(196, 149, 106, 0.25);
-    color: var(--sand);
-    text-decoration: none;
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    transition: border-color 0.2s, color 0.2s;
-  }
-
-  .social-btn:hover { border-color: var(--grain); color: var(--grain); }
-
-  .contact-form-area {
-    padding: 6rem 10vw 6rem 5vw;
-    background: var(--parchment);
-  }
-
-  .contact-form-area h2 {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--bark);
-    margin-bottom: 0.7rem;
-  }
-
-  .contact-form-area p {
-    font-size: 0.86rem;
-    color: var(--oak);
-    line-height: 1.6;
-    margin-bottom: 2.5rem;
-  }
-
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-
-  .form-group {
-    margin-bottom: 1.2rem;
-  }
-
-  .form-group label {
-    display: block;
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--oak);
-    margin-bottom: 0.4rem;
-  }
-
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
-    width: 100%;
-    background: var(--ivory);
-    border: 1px solid rgba(139, 94, 60, 0.25);
-    padding: 11px 14px;
-    font-family: var(--font-body);
-    font-size: 0.88rem;
-    color: var(--charcoal);
-    border-radius: 2px;
-    transition: border-color 0.2s;
-    outline: none;
-    appearance: none;
-  }
-
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus {
-    border-color: var(--grain);
-  }
-
-  .form-group textarea { height: 130px; resize: vertical; }
-
-  .form-note {
-    font-size: 0.75rem;
-    color: var(--oak);
-    margin-top: 1rem;
-    opacity: 0.7;
-  }
-
-  .form-success {
-    display: none;
-    background: var(--sage);
-    color: var(--cream);
-    padding: 1.5rem 2rem;
-    border-radius: 2px;
-    font-size: 0.88rem;
-    line-height: 1.65;
-    margin-top: 1.5rem;
-  }
-
-  /* ─── FOOTER ─── */
-  footer {
-    background: var(--charcoal);
-    padding: 4rem 10vw 2rem;
-    border-top: 1px solid rgba(196, 149, 106, 0.1);
-  }
-
-  .footer-top {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr;
-    gap: 4rem;
-    padding-bottom: 3rem;
-    border-bottom: 1px solid rgba(196, 149, 106, 0.1);
-    margin-bottom: 2rem;
-  }
-
-  .footer-brand img {
-    height: 40px;
-    width: auto;
-    filter: brightness(1.1);
-    margin-bottom: 1rem;
-  }
-
-  .footer-brand p {
-    font-size: 0.8rem;
-    color: rgba(232, 213, 188, 0.45);
-    line-height: 1.7;
-    max-width: 300px;
-  }
-
-  .footer-col h4 {
-    font-size: 0.65rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--grain);
-    margin-bottom: 1.2rem;
-  }
-
-  .footer-col ul { list-style: none; }
-
-  .footer-col ul li { margin-bottom: 0.6rem; }
-
-  .footer-col ul li a {
-    font-size: 0.82rem;
-    color: rgba(232, 213, 188, 0.5);
-    text-decoration: none;
-    transition: color 0.2s;
-    cursor: pointer;
-  }
-
-  .footer-col ul li a:hover { color: var(--grain); }
-
-  .footer-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .footer-bottom p {
-    font-size: 0.72rem;
-    color: rgba(232, 213, 188, 0.28);
-  }
-
-  .footer-bottom a {
-    color: rgba(196, 149, 106, 0.45);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  .footer-bottom a:hover { color: var(--grain); }
-
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 900px) {
-    .pillars { grid-template-columns: 1fr 1fr; }
-    .home-about { grid-template-columns: 1fr; }
-    .home-about-visual { min-height: 280px; }
-    .products-grid { grid-template-columns: 1fr 1fr; }
-    .about-overview { grid-template-columns: 1fr; }
-    .about-sidebar { position: static; }
-    .values-grid { grid-template-columns: 1fr 1fr; }
-    .model-grid { grid-template-columns: 1fr; }
-    .brand-card { grid-template-columns: 1fr; }
-    .brand-card-visual { min-height: 220px; }
-    .contact-body { grid-template-columns: 1fr; }
-    .footer-top { grid-template-columns: 1fr; gap: 2rem; }
-    .form-row { grid-template-columns: 1fr; }
-  }
-
-  @media (max-width: 600px) {
-    nav { padding: 0 4vw; }
-    .nav-links { display: none; }
-    .pillars { grid-template-columns: 1fr; }
-    .products-grid { grid-template-columns: 1fr; }
-    .values-grid { grid-template-columns: 1fr; }
-    section { padding: 4rem 6vw; }
-    .hero-content { padding: 0 6vw; }
-    .hero-scroll { left: 6vw; }
-    .cta-band { padding: 4rem 6vw; text-align: center; justify-content: center; }
-  }
-</style>
+<meta name="description" content="THJP Enterprises Pty Ltd — Australian-owned B2B importer and distributor of premium woodworking products. Supplying specialist retailers across Australia and New Zealand.">
+<title>THJP Enterprises Pty Ltd — Australian Woodworking Importer &amp; Distributor</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- ═══════════════════════════════ NAV ═══════════════════════════════ -->
-<nav>
-  <a class="nav-logo" href="#" onclick="showPage('home')">
-  <img src="../THJPEnterprises/images/logo.png" alt="THJP Enterprises Logo">
-  <div class="nav-logo-text">
-    THJP Enterprises
-    <span>Pty Ltd • Est. Australia</span>
+<!-- NAV -->
+<nav id="nav">
+  <div class="container nav-inner">
+    <a class="nav-logo" href="index.html">
+      <img src="https://lh3.googleusercontent.com/sitesv/AA5AbUDDhuGP_KPaNN1ws1x6KEaF9ZusEIK4wKEF9UE5M3PcytvXhf28c0agPKpPMVeRm2L_WiqNRhfRU6s5O6wqCaIZio3zxUBXhPdvEncZVgCzJyIHVc9eVgbXwI4wYLuKWw9s9I9abycTNdR3WQ30TjXU7S-t7BTLONUfHp1BkctZ23yNKQR-fIxEPdk=w16383" alt="THJP Enterprises logo">
+      <div class="nav-logo-text">THJP Enterprises<small>Pty Ltd &bull; Australian B2B Distributor</small></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html" data-page="index.html" class="active">Home</a></li>
+      <li><a href="pages/about.html" data-page="about.html">About Us</a></li>
+      <li><a href="pages/brands.html" data-page="brands.html">Our Brands</a></li>
+      <li><a href="pages/products.html" data-page="products.html">Products</a></li>
+      <li><a href="pages/contact.html" data-page="contact.html">Contact</a></li>
+    </ul>
+    <a href="pages/contact.html" class="nav-cta">Become a Stockist →</a>
+    <button class="nav-burger" id="nav-burger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-</a>
-  <ul class="nav-links">
-    <li><a href="#" id="nav-home" class="active" onclick="showPage('home')">Home</a></li>
-    <li><a href="#" id="nav-about" onclick="showPage('about')">About Us</a></li>
-    <li><a href="#" id="nav-brands" onclick="showPage('brands')">Our Distribution Brands</a></li>
-    <li><a href="#" id="nav-contact" class="cta" onclick="showPage('contact')">Contact Us</a></li>
-  </ul>
 </nav>
-
-<!-- ═══════════════════════════════ HOME ════════════════════════════════ -->
-<div class="page active" id="page-home">
-
-  <!-- Hero -->
-  <div class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-grain"></div>
-    <div class="hero-ring"></div>
-    <div class="hero-content">
-      <div class="hero-eyebrow">Australian Woodworking Importer &amp; Distributor</div>
-      <h1>The Craft of <em>Quality Supply</em></h1>
-      <p class="hero-sub">THJP Enterprises connects the world's finest woodworking products with Australia's network of specialist retailers — reliably, expertly, and at scale.</p>
-      <div class="hero-actions">
-        <button class="btn-primary" onclick="showPage('brands')">Our Distribution Brands</button>
-        <button class="btn-outline" onclick="showPage('about')">About the Company</button>
-      </div>
-    </div>
-    <div class="hero-scroll">
-      <div class="scroll-line"></div>
-      Scroll to explore
-    </div>
-  </div>
-
-  <!-- Pillars -->
-  <div class="pillars">
-    <div class="pillar">
-      <svg class="pillar-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5">
-        <circle cx="18" cy="18" r="14"/>
-        <circle cx="18" cy="18" r="8"/>
-        <circle cx="18" cy="18" r="3"/>
-        <line x1="4" y1="18" x2="10" y2="18"/>
-        <line x1="26" y1="18" x2="32" y2="18"/>
-      </svg>
-      <h3>B2B Import Specialist</h3>
-      <p>Exclusively wholesale — supplying Australia's woodworking retailers, not end consumers.</p>
-    </div>
-    <div class="pillar">
-      <svg class="pillar-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M6 28 L18 8 L30 28Z"/>
-        <path d="M11 20 L25 20"/>
-        <path d="M14 24 L22 24"/>
-      </svg>
-      <h3>Curated Quality</h3>
-      <p>Every brand and product is carefully selected for consistency, performance, and industry fit.</p>
-    </div>
-    <div class="pillar">
-      <svg class="pillar-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5">
-        <rect x="4" y="10" width="28" height="20" rx="1"/>
-        <path d="M12 10 V6 M24 10 V6"/>
-        <path d="M4 16 H32"/>
-      </svg>
-      <h3>Nationwide Network</h3>
-      <p>Trusted retail partnerships spanning every state and territory across Australia and NZ.</p>
-    </div>
-    <div class="pillar">
-      <svg class="pillar-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M8 28 C8 20 14 14 18 14 C22 14 28 20 28 28"/>
-        <circle cx="18" cy="10" r="4"/>
-        <path d="M12 28 L24 28"/>
-      </svg>
-      <h3>Expert Partnerships</h3>
-      <p>We empower retailers with product knowledge, supply reliability, and dedicated support.</p>
-    </div>
-  </div>
-
-  <!-- About Teaser -->
-  <div class="home-about">
-    <div class="home-about-text">
-      <div class="section-label">Who We Are</div>
-      <h2 class="display">More Than a<br><em>Distributor</em></h2>
-      <p class="section-lead" style="margin-bottom:1.5rem;">THJP Enterprises Pty Ltd is an Australian-owned importer and distributor dedicated entirely to the woodworking trade. We bridge premium international manufacturers with the retail professionals who serve Australia's craftspeople.</p>
-      <p style="font-size:0.86rem; color:var(--oak); line-height:1.75;">From precision hand tools and machinery to specialty timber products, wood oils, and finishing solutions — our portfolio covers every corner of the woodworking supply chain.</p>
-      <div class="home-about-stat">
-        <div class="stat-box">
-          <div class="stat-number">B2B</div>
-          <div class="stat-label">Wholesale Only</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-number">AU &amp; NZ</div>
-          <div class="stat-label">Markets Served</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-number">100%</div>
-          <div class="stat-label">Woodworking Focus</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-number">Global</div>
-          <div class="stat-label">Sourcing Network</div>
-        </div>
-      </div>
-    </div>
-    <div class="home-about-visual">
-      <!-- Wood rings illustration -->
-      <svg class="wood-rings-svg" width="380" height="380" viewBox="0 0 380 380" xmlns="http://www.w3.org/2000/svg">
-        <g transform="translate(190,190)" fill="none" stroke="#C4956A">
-          <circle r="170" stroke-width="0.5" opacity="0.3"/>
-          <circle r="150" stroke-width="0.7" opacity="0.4"/>
-          <circle r="130" stroke-width="0.5" opacity="0.35"/>
-          <circle r="110" stroke-width="1" opacity="0.5"/>
-          <circle r="92" stroke-width="0.5" opacity="0.4"/>
-          <circle r="75" stroke-width="1.5" opacity="0.6"/>
-          <circle r="60" stroke-width="0.8" opacity="0.45"/>
-          <circle r="46" stroke-width="1" opacity="0.55"/>
-          <circle r="33" stroke-width="0.7" opacity="0.5"/>
-          <circle r="22" stroke-width="1.5" opacity="0.65"/>
-          <circle r="13" stroke-width="1" opacity="0.6"/>
-          <circle r="6" stroke-width="2" opacity="0.8"/>
-        </g>
-        <line x1="190" y1="20" x2="190" y2="360" stroke="#C4956A" stroke-width="0.5" opacity="0.15"/>
-        <line x1="20" y1="190" x2="360" y2="190" stroke="#C4956A" stroke-width="0.5" opacity="0.15"/>
-      </svg>
-    </div>
-  </div>
-
-  <!-- Products Teaser -->
-  <section class="products-teaser">
-    <div class="section-label">Our Portfolio</div>
-    <h2 class="display">Products We <em>Supply</em></h2>
-    <p class="section-lead">A specialist range covering the full spectrum of the woodworking trade — sourced globally, distributed nationally.</p>
-    <div class="products-grid">
-      <div class="product-card">
-        <div class="product-card-icon">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="2" y="6" width="18" height="14" rx="1"/>
-            <path d="M6 6V4a5 5 0 0110 0v2"/>
-          </svg>
-        </div>
-        <h3>Machinery &amp; Equipment</h3>
-        <p>Woodworking machines, lathes, bandsaws, and precision workshop equipment from trusted global manufacturers.</p>
-      </div>
-      <div class="product-card">
-        <div class="product-card-icon">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M4 18L18 4M4 4h6M4 4v6"/>
-          </svg>
-        </div>
-        <h3>Hand Tools &amp; Instruments</h3>
-        <p>Precision hand tools, chisels, planes, and measuring instruments for professional craftspeople.</p>
-      </div>
-      <div class="product-card">
-        <div class="product-card-icon">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="11" cy="11" r="8"/>
-            <circle cx="11" cy="11" r="4"/>
-            <circle cx="11" cy="11" r="1"/>
-          </svg>
-        </div>
-        <h3>Woodturning Accessories</h3>
-        <p>Turning tools, chucks, faceplates, and specialist components for lathe work and bowl turning.</p>
-      </div>
-      <div class="product-card">
-        <div class="product-card-icon">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M5 17c1-3 4-5 6-5s5 2 6 5"/>
-            <circle cx="11" cy="7" r="4"/>
-          </svg>
-        </div>
-        <h3>Finishes &amp; Treatments</h3>
-        <p>Wood oils, waxes, lacquers, and coating systems engineered for lasting performance and natural beauty.</p>
-      </div>
-      <div class="product-card">
-        <div class="product-card-icon">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="3" y="8" width="7" height="12" rx="1"/>
-            <rect x="12" y="4" width="7" height="16" rx="1"/>
-          </svg>
-        </div>
-        <h3>Specialty Timber Products</h3>
-        <p>Pen blanks, craft materials, and value-added timber pieces for specific woodworking applications.</p>
-      </div>
-      <div class="product-card">
-        <div class="product-card-icon">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M11 2L2 7l9 5 9-5-9-5zM2 17l9 5 9-5M2 12l9 5 9-5"/>
-          </svg>
-        </div>
-        <h3>Accessories &amp; Components</h3>
-        <p>Supporting parts, consumables, and workshop accessories that complete every woodworker's toolkit.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA Band -->
-  <div class="cta-band">
-    <h2>Ready to Partner with <em>THJP Enterprises?</em></h2>
-    <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-      <button class="btn-primary" onclick="showPage('contact')">Enquire as a Retailer</button>
-      <button class="btn-outline" onclick="showPage('brands')">View Our Brands</button>
-    </div>
-  </div>
-
-  <footer>
-    <div class="footer-top">
-      <div class="footer-brand">
-        <img src="../THJPEnterprises/images/logo.png" alt="THJP Enterprises">
-        <p>Australian-owned importer and distributor of high-quality woodworking equipment, tools, finishes, and specialty timber products. Serving the Australian and New Zealand wholesale retail market.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Navigation</h4>
-        <ul>
-          <li><a onclick="showPage('home')">Home</a></li>
-          <li><a onclick="showPage('about')">About Us</a></li>
-          <li><a onclick="showPage('brands')">Our Distribution Brands</a></li>
-          <li><a onclick="showPage('contact')">Contact Us</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Connect</h4>
-        <ul>
-          <li><a href="mailto:info@thjpenterprises.com">info@thjpenterprises.com</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2025 THJP Enterprises Pty Ltd. All rights reserved. ABN available on request.</p>
-      <p>B2B wholesale supplier — not available to direct consumers.</p>
-    </div>
-  </footer>
+<div id="mobile-menu" class="mobile-menu">
+  <a href="index.html" data-page="index.html">Home</a>
+  <a href="pages/about.html" data-page="about.html">About Us</a>
+  <a href="pages/brands.html" data-page="brands.html">Our Distribution Brands</a>
+  <a href="pages/products.html" data-page="products.html">Products</a>
+  <a href="pages/contact.html" data-page="contact.html">Contact Us</a>
 </div>
 
-<!-- ═══════════════════════════════ ABOUT ════════════════════════════════ -->
-<div class="page" id="page-about">
-
-  <div class="about-hero">
-    <div class="page-hero-grain"></div>
-    <div class="page-hero-content">
-      <div class="page-eyebrow">About THJP Enterprises</div>
-      <h1 class="page-title">Importing <em>Excellence</em><br>into Australian Craft</h1>
-      <p class="page-subtitle">A specialist B2B importer and distributor, built around the needs of Australia's woodworking retail sector.</p>
+<!-- HERO — full-split image + text -->
+<section class="hero-full" style="padding:0;">
+  <div class="hero-full-text">
+    <div class="eyebrow" style="color:var(--grain);">Australian Woodworking Importer &amp; Distributor</div>
+    <h1 class="serif">The Craft of<br><em>Quality Supply</em></h1>
+    <p>THJP Enterprises connects the world's finest woodworking products with Australia's network of specialist retailers — reliably, expertly, and at scale.</p>
+    <div class="btn-group">
+      <a href="pages/brands.html" class="btn btn-primary btn-lg">Our Distribution Brands</a>
+      <a href="pages/about.html" class="btn btn-outline-light btn-lg">About the Company</a>
+    </div>
+    <div class="hero-pills">
+      <span class="pill">B2B Wholesale Only</span>
+      <span class="pill">Australia &amp; New Zealand</span>
+      <span class="pill">100% Woodworking Focus</span>
+      <span class="pill">Global Sourcing Network</span>
     </div>
   </div>
-
-  <!-- Overview -->
-  <section class="about-overview">
-    <div class="about-body">
-      <div class="section-label">Company Overview</div>
-      <h2 class="display" style="font-size:2.2rem;">THJP Enterprises<br><em>Pty Ltd</em></h2>
-
-      <h3>What We Do</h3>
-      <p>THJP Enterprises Pty Ltd is an Australian-owned importer and distributor of high-quality woodworking equipment, tools, accessories, finishes, and specialty timber products. We operate exclusively as an import business-to-business (B2B) supplier — supporting a nationwide network of branded retailers across Australia and New Zealand.</p>
-      <p>We do not sell directly to end users. Instead, we partner with wholesale retail businesses to ensure products reach woodworkers, craftspeople, and hobbyists through established local channels staffed by knowledgeable professionals.</p>
-
-      <h3>Our Product Range</h3>
-      <p>THJP Enterprises connects international and domestic manufacturers with the Australian retail market by supplying woodworking machinery and equipment, hand tools and precision instruments, woodturning accessories and components, finishing products including oils, waxes and coatings, and specialty timber products such as pen blanks and craft materials.</p>
-      <p>The company focuses on reliable supply, consistent quality, and strong retail partnerships across every segment of the trade.</p>
-
-      <h3>Not a Bulk Timber Supplier</h3>
-      <p>THJP Enterprises Pty Ltd is not a bulk or structural timber supplier. While we distribute selected timber-based products, our focus is on specialty timber pieces, craft and project materials, and value-added timber products for specific woodworking applications. This ensures a clear distinction from traditional timber wholesalers.</p>
-
-      <h3>Who We Work With</h3>
-      <p>Our wholesale network includes independent woodworking retailers and wholesalers, and domestic and international small, medium, and larger suppliers who share our commitment to quality and service excellence in the woodworking sector.</p>
+  <div class="hero-full-img">
+    <div class="hero-rings">
+      <!-- Wood-ring illustration — replaces with a real workshop photo if available -->
+      <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#C4956A">
+        <circle cx="250" cy="250" r="230" stroke-width="0.6"/>
+        <circle cx="250" cy="250" r="195" stroke-width="1"/>
+        <circle cx="250" cy="250" r="162" stroke-width="0.6"/>
+        <circle cx="250" cy="250" r="132" stroke-width="1.5"/>
+        <circle cx="250" cy="250" r="105" stroke-width="0.8"/>
+        <circle cx="250" cy="250" r="81"  stroke-width="1.2"/>
+        <circle cx="250" cy="250" r="60"  stroke-width="1"/>
+        <circle cx="250" cy="250" r="42"  stroke-width="1.8"/>
+        <circle cx="250" cy="250" r="26"  stroke-width="1.2"/>
+        <circle cx="250" cy="250" r="13"  stroke-width="2.5"/>
+        <circle cx="250" cy="250" r="4"   stroke-width="3"/>
+        <line x1="250" y1="20" x2="250" y2="480" stroke-width="0.4" opacity="0.4"/>
+        <line x1="20"  y1="250" x2="480" y2="250" stroke-width="0.4" opacity="0.4"/>
+      </svg>
     </div>
+  </div>
+</section>
 
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="container">
     <div>
-      <div class="about-sidebar">
-        <h3>Our Commitments</h3>
-        <div class="sidebar-item">
-          <div class="sidebar-dot"></div>
-          <p><strong style="color:var(--grain);">Strong retail partnerships</strong> — supporting stockists with dependable, consistent supply they can rely on.</p>
-        </div>
-        <div class="sidebar-item">
-          <div class="sidebar-dot"></div>
-          <p><strong style="color:var(--grain);">Quality sourcing</strong> — working exclusively with trusted global manufacturers and proven product lines.</p>
-        </div>
-        <div class="sidebar-item">
-          <div class="sidebar-dot"></div>
-          <p><strong style="color:var(--grain);">Niche product expertise</strong> — focusing on specialised woodworking needs, not general hardware.</p>
-        </div>
-        <div class="sidebar-item">
-          <div class="sidebar-dot"></div>
-          <p><strong style="color:var(--grain);">Consistency and reliability</strong> — delivering products retailers can trust, every time, on schedule.</p>
-        </div>
-        <div class="sidebar-item">
-          <div class="sidebar-dot"></div>
-          <p><strong style="color:var(--grain);">End-user benefit</strong> — empowering retailers to offer expert advice, local availability, and hands-on support.</p>
-        </div>
+      <div class="reveal"><div class="stat-num">B2B</div><div class="stat-label">Wholesale Only</div></div>
+      <div class="reveal reveal-delay-1"><div class="stat-num">AU &amp; NZ</div><div class="stat-label">Markets Served</div></div>
+      <div class="reveal reveal-delay-2"><div class="stat-num">100%</div><div class="stat-label">Woodworking Focus</div></div>
+      <div class="reveal reveal-delay-3"><div class="stat-num">Global</div><div class="stat-label">Sourcing Network</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- WHO WE ARE — split: text left, illustration right -->
+<section style="background:var(--parchment); padding:0;">
+  <div class="split">
+    <div class="split-body reveal">
+      <div class="eyebrow">Who We Are</div>
+      <h2 class="serif" style="color:var(--bark);">More Than a <em>Distributor</em></h2>
+      <p style="margin:1.25rem 0 1rem;">THJP Enterprises Pty Ltd is an Australian-owned importer and distributor dedicated entirely to the woodworking trade. We bridge premium international manufacturers with the retail professionals who serve Australia's craftspeople.</p>
+      <p style="margin-bottom:2rem;">From precision hand tools and machinery to specialty timber products, wood oils, and finishing solutions — our portfolio covers every corner of the woodworking supply chain.</p>
+      <div class="btn-group">
+        <a href="pages/about.html" class="btn btn-dark">Learn About Us</a>
+        <a href="pages/contact.html" class="btn btn-outline">Enquire as a Retailer</a>
       </div>
     </div>
-  </section>
-
-  <!-- Values -->
-  <div class="about-values">
-    <div class="section-label">Our Approach</div>
-    <h2 class="display">Built on the Right <em>Foundations</em></h2>
-    <p class="section-lead">Everything we do is guided by a simple belief: the woodworking trade deserves specialist partners, not generalists.</p>
-    <div class="values-grid">
-      <div class="value-card">
-        <h3>Retailer First</h3>
-        <p>Our business model centres entirely on empowering our retail partners — they know their customers, and we know how to supply them exceptionally well.</p>
-      </div>
-      <div class="value-card">
-        <h3>Specialist Knowledge</h3>
-        <p>We don't distribute across every category. Our deep focus on woodworking means every product decision is informed by genuine trade expertise.</p>
-      </div>
-      <div class="value-card">
-        <h3>Global Reach</h3>
-        <p>Through established manufacturer relationships across Europe, Asia, and beyond, we bring the world's best woodworking products to the Australian market.</p>
-      </div>
-      <div class="value-card">
-        <h3>Australian Owned</h3>
-        <p>THJP Enterprises is proudly Australian-owned and operated, with a genuine understanding of the local trade, standards, and retail environment.</p>
-      </div>
-      <div class="value-card">
-        <h3>Product Integrity</h3>
-        <p>We stand behind everything we distribute. Consistent quality and reliable performance aren't optional extras — they're our baseline requirement.</p>
-      </div>
-      <div class="value-card">
-        <h3>Long-Term Thinking</h3>
-        <p>We build lasting relationships with our retail partners, investing in mutual success rather than transactional supply arrangements.</p>
+    <div class="split-img reveal reveal-delay-1" style="background:var(--bark); min-height:520px;">
+      <div class="split-img-illustration">
+        <!-- Workshop/joinery scene illustration -->
+        <svg width="380" height="380" viewBox="0 0 380 380" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="rgba(196,149,106,0.35)" stroke-width="1">
+          <!-- Lathe outline -->
+          <rect x="60" y="150" width="260" height="18" rx="4" stroke-width="1.5"/>
+          <circle cx="95" cy="159" r="24"/>
+          <circle cx="95" cy="159" r="14"/>
+          <circle cx="95" cy="159" r="5" fill="rgba(196,149,106,0.2)"/>
+          <rect x="110" y="150" width="160" height="18" rx="0" fill="rgba(196,149,106,0.04)"/>
+          <rect x="280" y="140" width="30" height="36" rx="3"/>
+          <line x1="60" y1="168" x2="60" y2="210"/>
+          <line x1="320" y1="168" x2="320" y2="210"/>
+          <!-- Wood blank on lathe -->
+          <ellipse cx="95" cy="159" rx="20" ry="20" stroke="rgba(196,149,106,0.5)" stroke-width="0.5"/>
+          <rect x="115" y="154" width="155" height="10" rx="5" fill="rgba(196,149,106,0.08)" stroke="rgba(196,149,106,0.4)" stroke-width="1"/>
+          <!-- Bench -->
+          <rect x="40" y="250" width="300" height="12" rx="2" fill="rgba(196,149,106,0.06)" stroke="rgba(196,149,106,0.3)" stroke-width="1.2"/>
+          <rect x="55" y="262" width="12" height="70" rx="2"/>
+          <rect x="313" y="262" width="12" height="70" rx="2"/>
+          <!-- Tools on bench -->
+          <rect x="80" y="232" width="6" height="18" rx="1" stroke-width="1.5"/>
+          <rect x="80" y="224" width="6" height="10" rx="1" fill="rgba(196,149,106,0.1)" stroke-width="1.5"/>
+          <rect x="100" y="228" width="5" height="22" rx="1" stroke-width="1.5"/>
+          <rect x="120" y="235" width="80" height="5" rx="1" stroke-width="1.2"/>
+          <circle cx="215" cy="237" r="8" stroke-width="1.2"/>
+          <!-- Shavings / detail -->
+          <path d="M140 220 Q155 210 160 220 Q165 230 175 222" stroke-width="1" stroke-dasharray="2 2"/>
+          <path d="M155 215 Q165 205 175 215" stroke-width="1" stroke-dasharray="2 2"/>
+          <!-- Wood rings decoration top right -->
+          <circle cx="310" cy="80" r="50" stroke-width="0.5" opacity="0.5"/>
+          <circle cx="310" cy="80" r="38" stroke-width="0.8" opacity="0.5"/>
+          <circle cx="310" cy="80" r="27" stroke-width="0.6" opacity="0.5"/>
+          <circle cx="310" cy="80" r="18" stroke-width="1" opacity="0.6"/>
+          <circle cx="310" cy="80" r="10" stroke-width="1.2" opacity="0.7"/>
+          <circle cx="310" cy="80" r="4"  stroke-width="2" opacity="0.8"/>
+        </svg>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- Distribution Model -->
-  <div class="about-model">
-    <div class="section-label">Distribution Model</div>
-    <h2 class="display">How We <em>Operate</em></h2>
-    <p class="section-lead">A clean, focused model designed to serve retailers and ultimately benefit the craftspeople who depend on them.</p>
-    <div class="model-grid">
-      <div class="model-block">
-        <h3><span class="num">1</span> Source &amp; Import</h3>
-        <p>We identify, evaluate, and import woodworking products from trusted global manufacturers — managing all logistics and compliance to bring product efficiently into Australia.</p>
+<!-- PILLARS — 4-col icon cards -->
+<section style="background:var(--ivory);">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="eyebrow">What We Do</div>
+      <h2 class="serif" style="color:var(--bark);">Built for the <em>Woodworking Trade</em></h2>
+      <p>Four pillars that define how THJP Enterprises delivers value to our retail partners and the industry.</p>
+    </div>
+    <div class="grid-4">
+      <div class="icon-card reveal">
+        <div class="icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="9"/><circle cx="11" cy="11" r="5"/><circle cx="11" cy="11" r="2"/><line x1="2" y1="11" x2="6" y2="11"/><line x1="16" y1="11" x2="20" y2="11"/></svg>
+        </div>
+        <h3>B2B Import Specialist</h3>
+        <p>Exclusively wholesale — supplying Australia's woodworking retailers with premium imported products, not end consumers.</p>
       </div>
-      <div class="model-block">
-        <h3><span class="num">2</span> Quality Assurance</h3>
-        <p>Every product in our portfolio is vetted for consistency, performance, and suitability for the Australian and New Zealand market before it reaches a retailer's shelf.</p>
+      <div class="icon-card reveal reveal-delay-1">
+        <div class="icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l2.5 7.5H21l-6.5 4.5 2.5 7.5L11 17l-6 4.5 2.5-7.5L2 9.5h7.5z"/></svg>
+        </div>
+        <h3>Curated Quality</h3>
+        <p>Every brand and product is carefully selected for consistency, performance, and fit with Australian industry standards.</p>
       </div>
-      <div class="model-block">
-        <h3><span class="num">3</span> Wholesale Distribution</h3>
-        <p>We supply exclusively to our network of trusted wholesale retail partners across Australia — never directly to end consumers or hobbyists.</p>
+      <div class="icon-card reveal reveal-delay-2">
+        <div class="icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="7" width="18" height="14" rx="1"/><path d="M7 7V5a4 4 0 018 0v2"/><path d="M2 13h18"/></svg>
+        </div>
+        <h3>Nationwide Network</h3>
+        <p>Trusted retail partnerships spanning every state and territory across Australia and New Zealand.</p>
       </div>
-      <div class="model-block">
-        <h3><span class="num">4</span> Retailer Support</h3>
-        <p>Our retail partners receive the product knowledge and supply reliability they need to serve their customers with confidence and expertise.</p>
+      <div class="icon-card reveal reveal-delay-3">
+        <div class="icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <h3>Expert Partnerships</h3>
+        <p>We empower retailers with product knowledge, reliable supply, and dedicated support from people who know the craft.</p>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="cta-band">
-    <h2>Interested in Stocking Our <em>Products?</em></h2>
-    <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-      <button class="btn-primary" onclick="showPage('contact')">Get in Touch</button>
-      <button class="btn-outline" onclick="showPage('brands')">See Our Brands</button>
+<!-- PRODUCTS OVERVIEW — split: photo right -->
+<section style="background:var(--cream); padding:0;">
+  <div class="split reverse">
+    <div class="split-img" style="background:var(--timber);">
+      <div class="split-img-illustration">
+        <svg width="420" height="420" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="rgba(196,149,106,0.3)" stroke-width="1">
+          <!-- Hand tools grid illustration -->
+          <rect x="60" y="60" width="300" height="300" rx="4" stroke-width="0.5" opacity="0.4"/>
+          <!-- Chisel -->
+          <rect x="100" y="80" width="14" height="100" rx="2" stroke-width="1.5"/>
+          <polygon points="100,180 114,180 111,210 103,210" fill="rgba(196,149,106,0.1)" stroke-width="1.5"/>
+          <!-- Plane -->
+          <rect x="140" y="100" width="70" height="30" rx="3" stroke-width="1.5"/>
+          <rect x="148" y="100" width="54" height="14" rx="2" fill="rgba(196,149,106,0.08)"/>
+          <path d="M150 130 L175 160 L200 130" stroke-width="1"/>
+          <circle cx="175" cy="116" r="5" stroke-width="1.2"/>
+          <!-- Mallet -->
+          <rect x="240" y="80" width="40" height="50" rx="3" stroke-width="1.5"/>
+          <rect x="254" y="130" width="12" height="80" rx="2" stroke-width="1.2"/>
+          <!-- Saw -->
+          <rect x="80" y="230" width="120" height="18" rx="1" stroke-width="1.5"/>
+          <path d="M90 248 l5 12 l5-12 l5 12 l5-12 l5 12 l5-12 l5 12 l5-12 l5 12 l5-12 l5 12 l5-12 l5 12 l5-12 l5 12 l5-12 l5 12" stroke-width="1.2"/>
+          <rect x="185" y="224" width="15" height="24" rx="4" stroke-width="1.5"/>
+          <!-- Marking gauge -->
+          <line x1="240" y1="200" x2="320" y2="200" stroke-width="2"/>
+          <rect x="260" y="190" width="20" height="20" rx="2" stroke-width="1.5"/>
+          <line x1="240" y1="200" x2="243" y2="212" stroke-width="1.2"/>
+          <!-- Oils/finishing bottles -->
+          <rect x="240" y="250" width="28" height="60" rx="4" stroke-width="1.5"/>
+          <rect x="244" y="242" width="20" height="10" rx="2" stroke-width="1"/>
+          <rect x="278" y="255" width="28" height="55" rx="4" stroke-width="1.5"/>
+          <rect x="282" y="247" width="20" height="10" rx="2" stroke-width="1"/>
+          <!-- Wood grain lines top right -->
+          <line x1="310" y1="80" x2="370" y2="80" stroke-width="0.8" opacity="0.6"/>
+          <line x1="306" y1="90" x2="374" y2="90" stroke-width="0.8" opacity="0.5"/>
+          <line x1="308" y1="100" x2="372" y2="100" stroke-width="0.8" opacity="0.4"/>
+          <line x1="305" y1="110" x2="375" y2="110" stroke-width="0.8" opacity="0.3"/>
+        </svg>
+      </div>
+    </div>
+    <div class="split-body reveal">
+      <div class="eyebrow">Our Portfolio</div>
+      <h2 class="serif" style="color:var(--bark);">Products We <em>Supply</em></h2>
+      <p style="margin:1.25rem 0 1.5rem;">A specialist range covering the full spectrum of the woodworking trade — sourced globally, distributed nationally. Every product in our portfolio is selected for performance, quality, and relevance to the Australian market.</p>
+      <ul style="list-style:none; display:flex; flex-direction:column; gap:0.65rem; margin-bottom:2rem;">
+        <li style="display:flex; align-items:center; gap:10px; font-size:0.88rem; color:var(--warm-grey);"><span style="width:6px; height:6px; border-radius:50%; background:var(--grain); flex-shrink:0;"></span>Woodworking machinery &amp; equipment</li>
+        <li style="display:flex; align-items:center; gap:10px; font-size:0.88rem; color:var(--warm-grey);"><span style="width:6px; height:6px; border-radius:50%; background:var(--grain); flex-shrink:0;"></span>Hand tools &amp; precision instruments</li>
+        <li style="display:flex; align-items:center; gap:10px; font-size:0.88rem; color:var(--warm-grey);"><span style="width:6px; height:6px; border-radius:50%; background:var(--grain); flex-shrink:0;"></span>Woodturning accessories &amp; components</li>
+        <li style="display:flex; align-items:center; gap:10px; font-size:0.88rem; color:var(--warm-grey);"><span style="width:6px; height:6px; border-radius:50%; background:var(--grain); flex-shrink:0;"></span>Wood oils, waxes &amp; finishing systems</li>
+        <li style="display:flex; align-items:center; gap:10px; font-size:0.88rem; color:var(--warm-grey);"><span style="width:6px; height:6px; border-radius:50%; background:var(--grain); flex-shrink:0;"></span>Specialty timber products &amp; pen blanks</li>
+        <li style="display:flex; align-items:center; gap:10px; font-size:0.88rem; color:var(--warm-grey);"><span style="width:6px; height:6px; border-radius:50%; background:var(--grain); flex-shrink:0;"></span>Workshop accessories &amp; consumables</li>
+      </ul>
+      <div class="btn-group">
+        <a href="pages/products.html" class="btn btn-primary">View Full Product Range</a>
+      </div>
     </div>
   </div>
+</section>
 
-  <footer>
-    <div class="footer-top">
+<!-- VINNIE'S OIL TEASER — split: text left, oil bottles right -->
+<section style="background:var(--ivory); padding:0;">
+  <div class="split">
+    <div class="split-body reveal">
+      <div class="eyebrow">Featured Distribution Brand</div>
+      <h2 class="serif" style="color:var(--bark);">Vinnie's Oil® <em>Australia</em></h2>
+      <p style="margin:1.25rem 0 1rem;">Our flagship distribution brand — Vinnie's Oil is Sweden's premium toxin-free hardwax oil system. 100% VOC-free, food-safe, and curing in just 3 days. The strongest natural wood protection system available.</p>
+      <p style="margin-bottom:2rem;">THJP Enterprises is the exclusive authorised distributor of Vinnie's Oil across Australia and its Territories, supplying through our specialist retail network.</p>
+      <div class="btn-group">
+        <a href="pages/brands.html" class="btn btn-primary">See Our Brands</a>
+        <a href="https://vinniesoilaustralia.com" target="_blank" rel="noopener" class="btn btn-outline">Visit Vinnie's Oil Site ↗</a>
+      </div>
+    </div>
+    <div class="split-img reveal reveal-delay-1" style="background:linear-gradient(160deg,var(--bark) 0%,#1E1008 100%); display:flex; align-items:center; justify-content:center; gap:2rem; flex-wrap:wrap; padding:3rem;">
+      <img src="https://lh3.googleusercontent.com/sitesv/AA5AbUAZ3SbM49rOUSjbb5HWlUggo_ShOiWOD4SM4sJCovaV6uOxpYa_WBEcqkEnfj0AiNHblin-P3_MkABmI5WSI5iHUSdkwt5ml6ZSl0OdKgYGrC4JVrSGqTvd2R4w0rVtDHL20f7gCJyVR_7pwUngqX2__zL7owb7AYiXZuyj-9JcDFQjneYXe-j98apneVWu-58feHwqisdLcxVA=w1280" alt="Vinnie's Oil UPO" style="width:140px; height:200px; object-fit:contain; filter:drop-shadow(0 8px 24px rgba(0,0,0,0.5));">
+      <img src="https://lh3.googleusercontent.com/sitesv/AA5AbUBp-mgHJMv3R5WMcUOTDkdq8ID_GIlERhoBdXbGVuJF8sc1FzHrD_3hsln4iPi-ok1tISBW3wc2m17TxqJnMhNL9nuh0pYCCkIV8KfsfkQ3zGVgg_aYfoy4uL9G_dcmP60bDgZhawOEcgCzgc5BqS61WS6wk-8M0ZWdc6mnP1WhSZC-OCAz2dpAc6nx4g-12Id0vZgTM0tnI1-MCswZUPkc7-JLkKHovOgUals=w1280" alt="Vinnie's Oil Hard Wax" style="width:140px; height:200px; object-fit:contain; filter:drop-shadow(0 8px 24px rgba(0,0,0,0.5));">
+      <img src="https://lh3.googleusercontent.com/sitesv/AA5AbUAdrcL7J77Ky2ba7WYr9KYBG68Swtpiwf0nbvnw-0ZFkhUl4B5M_FiVyDSnDCzOnvoSJ32KFSL8COVMwq4nnn1_pYgava477N8nz4fy16fX6Hzc9CeyspjIHASsP_Ci-lvKjwKw7sd9K89tqBbng3XV-3DWQwJt9lFE7A1_MjDJifvHqNpAwuXId-2RXfR_6edYq7AxsH7MOznQXd1IVn9QOMjAFHPcjGQ8=w1280" alt="Vinnie's Oil Eternal Seal" style="width:140px; height:200px; object-fit:contain; filter:drop-shadow(0 8px 24px rgba(0,0,0,0.5));">
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<div class="cta-band">
+  <div class="container">
+    <div class="cta-band-inner">
+      <div>
+        <h2 class="serif">Ready to Partner with <em>THJP Enterprises?</em></h2>
+        <p>Join our growing network of authorised stockists across Australia and New Zealand.</p>
+      </div>
+      <div class="btn-group">
+        <a href="pages/contact.html" class="btn btn-primary btn-lg">Enquire as a Retailer</a>
+        <a href="pages/brands.html" class="btn btn-outline-light btn-lg">View Our Brands</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="container">
+    <div class="footer-grid">
       <div class="footer-brand">
-        <img src="../THJPEnterprises/images/logo.png" alt="THJP Enterprises">
-        <p>Australian-owned importer and distributor of high-quality woodworking equipment, tools, finishes, and specialty timber products.</p>
+        <img src="https://lh3.googleusercontent.com/sitesv/AA5AbUDDhuGP_KPaNN1ws1x6KEaF9ZusEIK4wKEF9UE5M3PcytvXhf28c0agPKpPMVeRm2L_WiqNRhfRU6s5O6wqCaIZio3zxUBXhPdvEncZVgCzJyIHVc9eVgbXwI4wYLuKWw9s9I9abycTNdR3WQ30TjXU7S-t7BTLONUfHp1BkctZ23yNKQR-fIxEPdk=w16383" alt="THJP Enterprises">
+        <p>Australian-owned B2B importer and distributor of high-quality woodworking equipment, tools, finishes, and specialty timber products. Serving the wholesale retail market across Australia and New Zealand.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/arboreanau/" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+        </div>
       </div>
       <div class="footer-col">
         <h4>Navigation</h4>
         <ul>
-          <li><a onclick="showPage('home')">Home</a></li>
-          <li><a onclick="showPage('about')">About Us</a></li>
-          <li><a onclick="showPage('brands')">Our Distribution Brands</a></li>
-          <li><a onclick="showPage('contact')">Contact Us</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="pages/about.html">About Us</a></li>
+          <li><a href="pages/brands.html">Our Distribution Brands</a></li>
+          <li><a href="pages/products.html">Products</a></li>
+          <li><a href="pages/contact.html">Contact Us</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Connect</h4>
         <ul>
           <li><a href="mailto:info@thjpenterprises.com">info@thjpenterprises.com</a></li>
+          <li><a href="https://www.instagram.com/arboreanau/" target="_blank" rel="noopener">@arboreanau</a></li>
+          <li><a href="http://arborean.com.au" target="_blank" rel="noopener">arborean.com.au</a></li>
+          <li><a href="https://vinniesoilaustralia.com" target="_blank" rel="noopener">vinniesoilaustralia.com</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2025 THJP Enterprises Pty Ltd. All rights reserved.</p>
-      <p>B2B wholesale supplier — not available to direct consumers.</p>
-    </div>
-  </footer>
-</div>
-
-<!-- ══════════════════════════════ BRANDS ═══════════════════════════════ -->
-<div class="page" id="page-brands">
-
-  <div class="about-hero brands-hero">
-    <div class="page-hero-grain"></div>
-    <div class="page-hero-content">
-      <div class="page-eyebrow">Distribution Portfolio</div>
-      <h1 class="page-title">Our Distribution <em>Brands</em></h1>
-      <p class="page-subtitle">Carefully selected, long-term brand partnerships representing quality, reliability, and innovation in the woodworking industry.</p>
+      <p>&copy; 2026 THJP Enterprises Pty Ltd. All rights reserved. B2B wholesale supplier only — not available to direct consumers.</p>
+      <p>Built for <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a></p>
     </div>
   </div>
+</footer>
 
-  <div class="brands-intro">
-    <div class="brands-intro-inner">
-      <div class="section-label" style="justify-content:center; text-align:left; display:flex;">Our Portfolio Philosophy</div>
-      <h2 class="display" style="text-align:center; margin-bottom:1.5rem;">Brands That <em>Earn Their Place</em></h2>
-      <p>At THJP Enterprises, our brands represent a commitment to quality, reliability, and long-term partnerships. We carefully select and develop relationships with products that meet the evolving needs of the Australian woodworking market — ensuring consistent performance and genuine value. Each brand within our portfolio reflects our focus on innovation, trust, and service excellence.</p>
-    </div>
-  </div>
+<button id="back-top" aria-label="Back to top">
+  <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7.5 12V3M3 7l4.5-4.5L12 7"/></svg>
+</button>
 
-  <div class="brands-list">
-
-    <!-- Vinnie's Oil -->
-    <div class="brand-card">
-      <div class="brand-card-visual">
-        <div class="brand-card-grain"></div>
-        <div class="brand-logo-placeholder">
-          <div style="font-family:'Cormorant Garamond',serif; font-size:1rem; color:var(--grain); letter-spacing:0.25em; text-transform:uppercase; margin-bottom:0.5rem;">Vinnie's</div>
-          <div class="brand-name-large">Oil®</div>
-          <div class="brand-tagline">Australia</div>
-        </div>
-        <div class="brand-badge">Wood Oils &amp; Finishes</div>
-        <div style="position:relative; z-index:1; margin-top:1rem;">
-          <svg width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="rgba(196,149,106,0.3)" stroke-width="0.5">
-            <circle cx="50" cy="50" r="45"/>
-            <circle cx="50" cy="50" r="35"/>
-            <circle cx="50" cy="50" r="25"/>
-            <circle cx="50" cy="50" r="16"/>
-            <circle cx="50" cy="50" r="9"/>
-            <circle cx="50" cy="50" r="4"/>
-          </svg>
-        </div>
-      </div>
-      <div class="brand-card-content">
-        <span class="brand-tag">Featured Brand</span>
-        <h2>Vinnie's Oil® Australia</h2>
-        <p>Vinnie's Oil Australia is one of THJP Enterprises' key distribution brands, representing our commitment to delivering high-quality wood oils, waxes, and finish solutions across the Australian market.</p>
-        <p>Focused on performance, reliability, and industry compliance, the brand supports a wide range of woodworking applications by providing products engineered to meet demanding operational standards. Through our relationship with Vinnie's Oil Europe, we continue to strengthen our presence internationally while ensuring customers receive dependable finishing solutions backed by expertise and consistent supply.</p>
-        <ul class="brand-features">
-          <li>Premium wood oils, waxes, and coating systems</li>
-          <li>Engineered for professional and craft applications</li>
-          <li>Backed by European manufacturing expertise</li>
-          <li>Distributed through specialist woodworking retailers</li>
-          <li>Full range of natural and synthetic finishing products</li>
-        </ul>
-        <a href="https://vinniesoilaustralia.com" target="_blank" class="brand-link">
-          Visit Vinnie's Oil Australia
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M1 11L11 1M11 1H5M11 1V7"/>
-          </svg>
-        </a>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Coming Soon -->
-  <div class="brands-coming">
-    <div class="section-label" style="justify-content:center;">Growing Portfolio</div>
-    <h3>More Brands Coming Soon</h3>
-    <p>THJP Enterprises is continually developing new brand partnerships to expand our offering across the woodworking sector. If you represent a quality woodworking brand seeking Australian distribution, we'd love to hear from you.</p>
-    <button class="btn-primary" onclick="showPage('contact')">Discuss a Partnership</button>
-  </div>
-
-  <div class="cta-band">
-    <h2>Want to Stock <em>Our Brands?</em></h2>
-    <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-      <button class="btn-primary" onclick="showPage('contact')">Become a Stockist</button>
-      <button class="btn-outline" onclick="showPage('about')">About Our Company</button>
-    </div>
-  </div>
-
-  <footer>
-    <div class="footer-top">
-      <div class="footer-brand">
-        <img src="../THJPEnterprises/images/logo.png" alt="THJP Enterprises">
-        <p>Australian-owned importer and distributor of high-quality woodworking products.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Navigation</h4>
-        <ul>
-          <li><a onclick="showPage('home')">Home</a></li>
-          <li><a onclick="showPage('about')">About Us</a></li>
-          <li><a onclick="showPage('brands')">Our Distribution Brands</a></li>
-          <li><a onclick="showPage('contact')">Contact Us</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Our Brands</h4>
-        <ul>
-          <li><a href="https://vinniesoilaustralia.com" target="_blank">Vinnie's Oil® Australia</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2025 THJP Enterprises Pty Ltd. All rights reserved.</p>
-      <p>B2B wholesale only.</p>
-    </div>
-  </footer>
-</div>
-
-<!-- ══════════════════════════════ CONTACT ═══════════════════════════════ -->
-<div class="page" id="page-contact">
-
-  <div class="about-hero contact-hero">
-    <div class="page-hero-grain"></div>
-    <div class="page-hero-content">
-      <div class="page-eyebrow">Get in Touch</div>
-      <h1 class="page-title">Contact <em>THJP Enterprises</em></h1>
-      <p class="page-subtitle">Wholesale enquiries, retailer partnerships, and brand distribution discussions welcome. We respond to all business enquiries.</p>
-    </div>
-  </div>
-
-  <div class="contact-body">
-    <!-- Sidebar -->
-    <div class="contact-sidebar">
-      <h2>Let's Build Something <em style="color:var(--grain); font-style:italic;">Together</em></h2>
-      <p>THJP Enterprises works exclusively with wholesale retail businesses, independent woodworking retailers, and brand partners. If you're interested in stocking our products or exploring a distribution partnership, get in touch.</p>
-
-      <div class="contact-methods">
-        <a href="mailto:info@thjpenterprises.com" class="contact-method">
-          <div class="contact-method-icon">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
-              <rect x="2" y="4" width="14" height="10" rx="1"/>
-              <path d="M2 4l7 6 7-6"/>
-            </svg>
-          </div>
-          <div class="contact-method-text">
-            <div class="label">Email</div>
-            <div class="value">info@thjpenterprises.com</div>
-          </div>
-        </a>
-
-      <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid rgba(196,149,106,0.15);">
-        <p style="font-size:0.75rem; color:rgba(232,213,188,0.35); line-height:1.7;">THJP Enterprises Pty Ltd operates as a B2B wholesale importer and distributor. We do not sell directly to individual consumers or hobbyists. All enquiries should relate to wholesale purchasing, retail partnerships, or brand distribution.</p>
-      </div>
-    </div>
-
-    <!-- Form -->
-    <div class="contact-form-area">
-      <h2>Send an Enquiry</h2>
-      <p>Fill in the form below and we'll be in touch within 2 business days. For urgent matters, email us directly.</p>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>First Name</label>
-          <input type="text" placeholder="Your first name" id="f-firstname">
-        </div>
-        <div class="form-group">
-          <label>Last Name</label>
-          <input type="text" placeholder="Your last name" id="f-lastname">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Business Name</label>
-        <input type="text" placeholder="Your company or store name" id="f-company">
-      </div>
-
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" placeholder="you@yourbusiness.com.au" id="f-email">
-      </div>
-
-      <div class="form-group">
-        <label>Enquiry Type</label>
-        <select id="f-type">
-          <option value="">Select an enquiry type…</option>
-          <option>Become a Retailer / Stockist</option>
-          <option>Brand Distribution Partnership</option>
-          <option>Product Enquiry</option>
-          <option>General Business Enquiry</option>
-          <option>Other</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Message</label>
-        <textarea placeholder="Tell us about your business, what you're looking for, and how we can help…" id="f-message"></textarea>
-      </div>
-
-      <button class="btn-primary" onclick="handleSubmit()" style="width:100%; justify-content:center;">Send Enquiry</button>
-      <p class="form-note">This form is for wholesale and business enquiries only. THJP Enterprises does not sell direct to consumers.</p>
-
-      <div class="form-success" id="form-success">
-        <strong style="display:block; margin-bottom:0.4rem;">Enquiry Received — Thank You</strong>
-        We'll review your message and get back to you within 2 business days. For immediate assistance, please email <a href="mailto:info@thjpenterprises.com" style="color:var(--sand);">info@thjpenterprises.com</a> directly.
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    <div class="footer-top">
-      <div class="footer-brand">
-        <img src="../THJPEnterprises/images/logo.png" alt="THJP Enterprises">
-        <p>Australian-owned importer and distributor of high-quality woodworking products.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Navigation</h4>
-        <ul>
-          <li><a onclick="showPage('home')">Home</a></li>
-          <li><a onclick="showPage('about')">About Us</a></li>
-          <li><a onclick="showPage('brands')">Our Distribution Brands</a></li>
-          <li><a onclick="showPage('contact')">Contact Us</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Connect</h4>
-        <ul>
-          <li><a href="mailto:info@thjpenterprises.com">info@thjpenterprises.com</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2025 THJP Enterprises Pty Ltd. All rights reserved.</p>
-      <p>B2B wholesale only.</p>
-    </div>
-  </footer>
-</div>
-
-<script>
-  function showPage(id) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-    document.getElementById('page-' + id).classList.add('active');
-    const navEl = document.getElementById('nav-' + id);
-    if (navEl) navEl.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    return false;
-  }
-
-  function handleSubmit() {
-    const first = document.getElementById('f-firstname').value.trim();
-    const email = document.getElementById('f-email').value.trim();
-    if (!first || !email) {
-      alert('Please fill in at least your name and email address.');
-      return;
-    }
-    document.getElementById('form-success').style.display = 'block';
-    document.getElementById('form-success').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-</script>
+<script src="js/shared.js"></script>
 </body>
 </html>

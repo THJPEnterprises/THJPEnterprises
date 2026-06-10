@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Contact THJP Enterprises Pty Ltd — wholesale enquiries, retailer applications and brand distribution discussions. Australian woodworking B2B importer and distributor.">
+<title>Contact Us — THJP Enterprises Pty Ltd</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+.enquiry-types { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; margin-bottom:2rem; }
+.etype { padding:0.9rem 1rem; border:1.5px solid var(--light-grey); border-radius:6px; cursor:pointer; transition:all 0.2s; background:var(--ivory); }
+.etype:hover { border-color:var(--grain); background:var(--cream); }
+.etype.selected { border-color:var(--bark); background:var(--cream); }
+.etype h4 { font-size:0.82rem; color:var(--bark); margin-bottom:2px; }
+.etype p { font-size:0.72rem; margin:0; }
+.form-success-box { display:none; background:rgba(74,89,64,0.1); border:1.5px solid var(--moss); border-radius:8px; padding:1.5rem; margin-top:1.25rem; align-items:flex-start; gap:1rem; }
+.form-success-box svg { color:var(--moss); flex-shrink:0; margin-top:2px; }
+.form-success-box h3 { font-size:0.95rem; color:var(--sage); margin-bottom:0.25rem; }
+.form-success-box p { font-size:0.82rem; margin:0; }
+.contact-info-strip { background:var(--cream); padding:4rem 0; border-top:1px solid var(--light-grey); }
+.contact-info-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; }
+.cinfo { text-align:center; padding:1.75rem; background:var(--ivory); border:1px solid var(--light-grey); border-radius:8px; }
+.cinfo-icon { width:48px; height:48px; background:var(--cream); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; color:var(--oak); border:1px solid var(--light-grey); }
+.cinfo h3 { font-size:0.88rem; color:var(--bark); margin-bottom:0.4rem; }
+.cinfo a, .cinfo p { font-size:0.82rem; color:var(--warm-grey); }
+.cinfo a:hover { color:var(--grain); }
+@media(max-width:768px){ .enquiry-types { grid-template-columns:1fr; } .contact-info-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<nav id="nav"><div class="container nav-inner">
+  <a class="nav-logo" href="../index.html"><img src="https://lh3.googleusercontent.com/sitesv/AA5AbUDDhuGP_KPaNN1ws1x6KEaF9ZusEIK4wKEF9UE5M3PcytvXhf28c0agPKpPMVeRm2L_WiqNRhfRU6s5O6wqCaIZio3zxUBXhPdvEncZVgCzJyIHVc9eVgbXwI4wYLuKWw9s9I9abycTNdR3WQ30TjXU7S-t7BTLONUfHp1BkctZ23yNKQR-fIxEPdk=w16383" alt="THJP Enterprises"><div class="nav-logo-text">THJP Enterprises<small>Pty Ltd &bull; Australian B2B Distributor</small></div></a>
+  <ul class="nav-links">
+    <li><a href="../index.html" data-page="index.html">Home</a></li>
+    <li><a href="about.html" data-page="about.html">About Us</a></li>
+    <li><a href="brands.html" data-page="brands.html">Our Brands</a></li>
+    <li><a href="products.html" data-page="products.html">Products</a></li>
+    <li><a href="contact.html" data-page="contact.html" class="active">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta" style="background:var(--grain);">Become a Stockist →</a>
+  <button class="nav-burger" id="nav-burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</div></nav>
+<div id="mobile-menu" class="mobile-menu">
+  <a href="../index.html">Home</a><a href="about.html">About Us</a><a href="brands.html">Our Distribution Brands</a><a href="products.html">Products</a><a href="contact.html">Contact Us</a>
+</div>
+
+<!-- HERO — shorter for contact -->
+<div class="page-hero" style="min-height:340px;">
+  <div class="page-hero-bg">
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1A0E06 0%,#2C1A0E 50%,#4A2810 100%);"></div>
+    <svg style="position:absolute;right:-4%;top:50%;transform:translateY(-50%);width:46%;opacity:0.07;" viewBox="0 0 500 500" fill="none" stroke="#C4956A"><circle cx="250" cy="250" r="220"/><circle cx="250" cy="250" r="175"/><circle cx="250" cy="250" r="132"/><circle cx="250" cy="250" r="92"/><circle cx="250" cy="250" r="56"/><circle cx="250" cy="250" r="26"/></svg>
+  </div>
+  <div class="page-hero-overlay"></div>
+  <div class="container page-hero-content">
+    <div class="eyebrow">Get in Touch</div>
+    <h1 class="serif">Contact <em>THJP Enterprises</em></h1>
+    <p>Wholesale enquiries, retailer applications, and brand distribution discussions welcome. We respond to all business enquiries within 2 business days.</p>
+  </div>
+</div>
+
+<!-- CONTACT SPLIT — sidebar + form -->
+<div class="contact-split">
+
+  <!-- SIDEBAR -->
+  <div class="contact-sidebar">
+    <div class="eyebrow" style="color:var(--grain);margin-bottom:1.5rem;"><span style="display:block;width:28px;height:1px;background:var(--grain);margin-right:10px;flex-shrink:0;"></span>Our Contact Details</div>
+    <h2>Let's Build Something <em>Together</em></h2>
+    <p>THJP Enterprises works exclusively with wholesale retail businesses, independent woodworking retailers, and brand partners. Whether you're applying to stock our products or exploring a distribution partnership, we're ready to talk.</p>
+
+    <a href="mailto:info@thjpenterprises.com" class="contact-method">
+      <div class="contact-method-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="14" height="10" rx="1"/><path d="M1 3l7 6 7-6"/></svg></div>
+      <div><div class="contact-method-label">Email</div><div class="contact-method-value">info@thjpenterprises.com</div></div>
+    </a>
+    <a href="http://arborean.com.au" target="_blank" rel="noopener" class="contact-method">
+      <div class="contact-method-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6"/><path d="M8 2a7 7 0 010 12M2 8h12"/></svg></div>
+      <div><div class="contact-method-label">Website</div><div class="contact-method-value">arborean.com.au</div></div>
+    </a>
+    <a href="https://www.instagram.com/arboreanau/" target="_blank" rel="noopener" class="contact-method">
+      <div class="contact-method-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></div>
+      <div><div class="contact-method-label">Instagram</div><div class="contact-method-value">@arboreanau</div></div>
+    </a>
+    <a href="https://vinniesoilaustralia.com" target="_blank" rel="noopener" class="contact-method">
+      <div class="contact-method-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 15L15 1M15 1H7M15 1v8"/></svg></div>
+      <div><div class="contact-method-label">Vinnie's Oil Brand Site</div><div class="contact-method-value">vinniesoilaustralia.com</div></div>
+    </a>
+
+    <div style="margin-top:2.5rem; padding-top:2rem; border-top:1px solid rgba(196,149,106,0.15);">
+      <p style="font-size:0.74rem; color:rgba(232,213,188,0.32); line-height:1.72;">THJP Enterprises Pty Ltd operates as a B2B wholesale importer and distributor. We do not sell directly to individual consumers. All enquiries should relate to wholesale purchasing, retail partnerships, or brand distribution.<br><br>Response time: 2 business days.</p>
+    </div>
+  </div>
+
+  <!-- FORM AREA -->
+  <div class="contact-form-area">
+    <h2>Send an <em>Enquiry</em></h2>
+    <p>Select your enquiry type below and fill in the form. All fields marked with an asterisk are required.</p>
+
+    <div class="enquiry-types" id="enquiry-types">
+      <div class="etype" onclick="selectType(this,'Retailer / Stockist Application')">
+        <h4>🏪 Retailer Application</h4>
+        <p>Apply to stock THJP products in my business</p>
+      </div>
+      <div class="etype" onclick="selectType(this,'Brand Distribution Partnership')">
+        <h4>🤝 Brand Partnership</h4>
+        <p>My brand is seeking Australian distribution</p>
+      </div>
+      <div class="etype" onclick="selectType(this,'Wholesale Order Enquiry')">
+        <h4>📦 Wholesale Order</h4>
+        <p>Existing stockist — ordering or supply question</p>
+      </div>
+      <div class="etype" onclick="selectType(this,'General Business Enquiry')">
+        <h4>💼 General Enquiry</h4>
+        <p>Other business or partnership enquiry</p>
+      </div>
+    </div>
+
+    <form id="contact-form" novalidate>
+      <input type="hidden" id="enquiry-type-field" name="subject" value="THJP Enterprises — Website Enquiry">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="c-fname">First Name *</label>
+          <input type="text" id="c-fname" name="name" placeholder="Your first name" required>
+        </div>
+        <div class="form-group">
+          <label for="c-lname">Last Name *</label>
+          <input type="text" id="c-lname" name="lastname" placeholder="Your last name" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="c-business">Business / Company Name *</label>
+        <input type="text" id="c-business" name="business" placeholder="Your store or company name" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="c-email">Email Address *</label>
+          <input type="email" id="c-email" name="email" placeholder="you@yourbusiness.com.au" required>
+        </div>
+        <div class="form-group">
+          <label for="c-phone">Phone Number</label>
+          <input type="tel" id="c-phone" name="phone" placeholder="(03) xxxx xxxx">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="c-state">State / Territory</label>
+          <select id="c-state" name="state">
+            <option value="">Select…</option>
+            <option>New South Wales</option><option>Victoria</option><option>Queensland</option>
+            <option>Western Australia</option><option>South Australia</option><option>Tasmania</option>
+            <option>ACT</option><option>Northern Territory</option><option>New Zealand</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="c-btype">Business Type</label>
+          <select id="c-btype" name="btype">
+            <option value="">Select…</option>
+            <option>Woodworking / Timber Specialist</option>
+            <option>Hardware / Trade Store</option>
+            <option>Craft / Hobby Store</option>
+            <option>Online Retailer</option>
+            <option>Manufacturer / Brand</option>
+            <option>Flooring Specialist</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="c-msg">Message *</label>
+        <textarea id="c-msg" name="message" placeholder="Tell us about your business, what products you're interested in, and how we can help…" style="min-height:140px;" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">Send Enquiry →</button>
+      <p class="form-note" style="margin-top:1rem;">This form is for wholesale and business enquiries only. THJP Enterprises does not sell direct to consumers. By submitting you agree to be contacted by our team regarding your enquiry.</p>
+    </form>
+
+    <div id="form-success" class="form-success-box">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
+      <div>
+        <h3>Enquiry Received — Thank You</h3>
+        <p>We'll review your message and respond within 2 business days. For urgent matters, email <a href="mailto:info@thjpenterprises.com" style="color:var(--sage);">info@thjpenterprises.com</a> directly.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT INFO STRIP -->
+<div class="contact-info-strip">
+  <div class="container">
+    <div class="section-head center" style="margin-bottom:2.5rem;">
+      <div class="eyebrow">Other Ways to Connect</div>
+      <h2 class="serif" style="color:var(--bark);">Find Us <em>Online</em></h2>
+    </div>
+    <div class="contact-info-grid">
+      <div class="cinfo">
+        <div class="cinfo-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="16" height="12" rx="1"/><path d="M2 4l8 7 8-7"/></svg></div>
+        <h3>Email</h3>
+        <a href="mailto:info@thjpenterprises.com">info@thjpenterprises.com</a>
+      </div>
+      <div class="cinfo">
+        <div class="cinfo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="20" height="20"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></div>
+        <h3>Instagram</h3>
+        <a href="https://www.instagram.com/arboreanau/" target="_blank" rel="noopener">@arboreanau</a>
+      </div>
+      <div class="cinfo">
+        <div class="cinfo-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 2a10 10 0 010 16M2 10h16"/></svg></div>
+        <h3>Vinnie's Oil Australia</h3>
+        <a href="https://vinniesoilaustralia.com" target="_blank" rel="noopener">vinniesoilaustralia.com</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer id="footer"><div class="container"><div class="footer-grid">
+  <div class="footer-brand"><img src="https://lh3.googleusercontent.com/sitesv/AA5AbUDDhuGP_KPaNN1ws1x6KEaF9ZusEIK4wKEF9UE5M3PcytvXhf28c0agPKpPMVeRm2L_WiqNRhfRU6s5O6wqCaIZio3zxUBXhPdvEncZVgCzJyIHVc9eVgbXwI4wYLuKWw9s9I9abycTNdR3WQ30TjXU7S-t7BTLONUfHp1BkctZ23yNKQR-fIxEPdk=w16383" alt="THJP Enterprises"><p>Australian-owned B2B importer and distributor of premium woodworking products. THJP Enterprises Pty Ltd.</p><div class="footer-social"><a href="https://www.instagram.com/arboreanau/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a></div></div>
+  <div class="footer-col"><h4>Navigation</h4><ul><li><a href="../index.html">Home</a></li><li><a href="about.html">About Us</a></li><li><a href="brands.html">Our Brands</a></li><li><a href="products.html">Products</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+  <div class="footer-col"><h4>Connect</h4><ul><li><a href="mailto:info@thjpenterprises.com">info@thjpenterprises.com</a></li><li><a href="https://www.instagram.com/arboreanau/" target="_blank" rel="noopener">@arboreanau</a></li><li><a href="https://vinniesoilaustralia.com" target="_blank" rel="noopener">vinniesoilaustralia.com</a></li></ul></div>
+</div><div class="footer-bottom"><p>&copy; 2026 THJP Enterprises Pty Ltd. All rights reserved. B2B wholesale only.</p><p><a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a></p></div></div></footer>
+<button id="back-top" aria-label="Back to top"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7.5 12V3M3 7l4.5-4.5L12 7"/></svg></button>
+<script src="../js/shared.js"></script>
+<script>
+function selectType(el, type) {
+  document.querySelectorAll('.etype').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('enquiry-type-field').value = 'THJP Enquiry — ' + type;
+}
+</script>
+</body></html>
