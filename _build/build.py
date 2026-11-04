@@ -35,9 +35,9 @@ MARK = '<img class="brand-badge" src="{root}images/thjp-badge-64.png" srcset="{r
 
 # ===================== SITE SETTINGS — fill these in, then run: python3 _build/build.py =====================
 SETTINGS = {
-    "W3F_KEY":   "",   # Web3Forms access key (free from web3forms.com, sent to info@thjpenterprises.com). Empty = form opens visitor's email app.
+    "FORMSPREE_ID": "",  # Formspree form ID — the part after formspree.io/f/ (e.g. "xyzabcde"). Empty = form opens visitor's email app.
     "PHONE":     "",   # e.g. "+61 2 0000 0000" — shown in footer, contact page and Google data. Empty = hidden.
-    "ADDRESS":   "",   # e.g. "PO Box 12, Mount Colah NSW 2079" — empty = hidden.
+    "ADDRESS":   "PO Box 12, Mount Colah NSW 2079",   # e.g. "PO Box 12, Mount Colah NSW 2079" — empty = hidden.
     "LINKEDIN":  "",   # e.g. "https://www.linkedin.com/company/thjp-enterprises" — empty = hidden.
     "CF_TOKEN":  "",   # Cloudflare Web Analytics token (free, cookie-free). Empty = no analytics.
 }
@@ -137,7 +137,7 @@ def page(name, title, desc, root, body, light=False):
     ld = org_ld() if name == 'index.html' else ''
     if SETTINGS["CF_TOKEN"]:
         ld += '\n<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon=\'{"token": "' + SETTINGS["CF_TOKEN"] + '"}\'></script>'
-    body = body.replace("<!--EXTRA_CHANNELS-->", extra_channels()).replace("{{W3F_KEY}}", SETTINGS["W3F_KEY"])
+    body = body.replace("<!--EXTRA_CHANNELS-->", extra_channels()).replace("{{FORMSPREE_ID}}", SETTINGS["FORMSPREE_ID"])
     return f'''<!DOCTYPE html>
 <html lang="en-AU">
 <head>

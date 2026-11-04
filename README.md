@@ -36,13 +36,13 @@ its card falls back to a styled placeholder.
 
 ## Site settings
 Open `_build/build.py` and fill in the `SETTINGS` block at the top, then run `python3 _build/build.py`:
-- `W3F_KEY` — Web3Forms access key. Enquiries are then emailed straight to info@thjpenterprises.com.
+- `FORMSPREE_ID` — Formspree form ID (the code after formspree.io/f/). Enquiries are then emailed straight to info@thjpenterprises.com.
   Without a key the form falls back to opening the visitor's email app.
 - `PHONE`, `ADDRESS`, `LINKEDIN` — shown in the footer, on the contact page and in Google's company data when set.
 - `CF_TOKEN` — Cloudflare Web Analytics token (free, no cookies).
 
 ## Contact form
-Uses Web3Forms (free tier: 250 enquiries/month). If sending fails, visitors are offered a one-click
+Uses Formspree (formspree.io). Spam is filtered by Formspree plus a hidden `_gotcha` field; replies go straight to the enquirer. If sending fails, visitors are offered a one-click
 "send it by email instead" with their details pre-filled. Resource links (e.g. `contact.html?type=wholesale&resource=Price%20list`)
 pre-fill the message with the document being requested.
 

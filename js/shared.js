@@ -94,7 +94,7 @@
     var btn = form.querySelector('button[type="submit"]');
     var btnHTML = btn ? btn.innerHTML : '';
     var labels = { retailer: 'Stockist application', brand: 'Brand distribution', wholesale: 'Existing account', general: 'General enquiry' };
-    var skip = { access_key: 1, botcheck: 1, from_name: 1, subject: 1 };
+    var skip = { _subject: 1, _gotcha: 1 };
     function subjectFor(d) { return 'Website enquiry — ' + (labels[d.get('enquiry_type')] || 'General') + ' — ' + (d.get('company') || ''); }
     function openMail(d) {
       var lines = [];
@@ -109,17 +109,16 @@
       [okBox, errBox, mailNote].forEach(function (b) { if (b) b.classList.remove('show'); });
       if (!form.reportValidity()) return;
       var data = new FormData(form);
-      if (data.get('botcheck')) return; // bot
-      data.set('subject', subjectFor(data));
-      data.set('replyto', data.get('email') || '');
+      if (data.get('_gotcha')) return; // bot
+      data.set('_subject', subjectFor(data));
+      data.set('_replyto', data.get('email') || '');
       var key = form.getAttribute('data-key');
       if (!key) { openMail(data); mailNote.classList.add('show'); return; } // no key configured yet
       if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
-      var payload = {}; data.forEach(function (v, k) { payload[k] = v; });
-      fetch(form.getAttribute('action'), { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(payload) })
+      fetch(form.getAttribute('action'), { method: 'POST', headers: { Accept: 'application/json' }, body: data })
         .then(function (res) { return res.json().catch(function () { return {}; }).then(function (j) { return { ok: res.ok, j: j }; }); })
         .then(function (r) {
-          if (!r.ok || r.j.success === false) throw new Error(r.j.message || 'Failed');
+          if (!r.ok || r.j.errors) throw new Error((r.j.errors && r.j.errors.map(function (x) { return x.message; }).join('; ')) || 'Failed');
           form.reset(); okBox.classList.add('show'); okBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         })
         .catch(function (err) { if (window.console) console.warn('Enquiry form:', err && err.message); errBox.classList.add('show'); })

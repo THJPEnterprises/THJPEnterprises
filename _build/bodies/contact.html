@@ -23,13 +23,11 @@
     </div>
 
     <div class="form-card reveal d1">
-      <!-- Submissions are delivered to info@thjpenterprises.com via Web3Forms (web3forms.com).
-           The access key is set in _build/build.py (SETTINGS["W3F_KEY"]). Without a key the form opens the visitor's email app instead. -->
-      <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" data-key="{{W3F_KEY}}" novalidate>
-        <input type="hidden" name="access_key" value="{{W3F_KEY}}">
-        <input type="hidden" name="subject" value="Website enquiry — THJP Enterprises">
-        <input type="hidden" name="from_name" value="THJP Enterprises website">
-        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <!-- Submissions are delivered to info@thjpenterprises.com via Formspree (formspree.io).
+           The form ID is set in _build/build.py (SETTINGS["FORMSPREE_ID"]). Without an ID the form opens the visitor's email app instead. -->
+      <form id="contact-form" action="https://formspree.io/f/{{FORMSPREE_ID}}" method="POST" data-key="{{FORMSPREE_ID}}" novalidate>
+        <input type="hidden" name="_subject" value="Website enquiry — THJP Enterprises">
+        <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         <span class="field"><label>What can we help with?</label></span>
         <div class="types" role="radiogroup">
           <label><input type="radio" name="enquiry_type" value="retailer" checked><span>Become a stockist<small>Stock our brands in your business</small></span></label>
