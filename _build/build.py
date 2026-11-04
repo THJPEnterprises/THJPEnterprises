@@ -35,8 +35,8 @@ MARK = '<img class="brand-badge" src="{root}images/thjp-badge-64.png" srcset="{r
 
 # ===================== SITE SETTINGS — fill these in, then run: python3 _build/build.py =====================
 SETTINGS = {
-    "FORMSPREE_ID": "",  # Formspree form ID — the part after formspree.io/f/ (e.g. "xyzabcde"). Empty = form opens visitor's email app.
-    "PHONE":     "",   # e.g. "+61 2 0000 0000" — shown in footer, contact page and Google data. Empty = hidden.
+    "FORMSPREE_ID": "xnppwgwe",  # Formspree form ID — the part after formspree.io/f/ (e.g. "xyzabcde"). Empty = form opens visitor's email app.
+    "PHONE":     "0414 643 100",   # e.g. "+61 2 0000 0000" — shown in footer, contact page and Google data. Empty = hidden.
     "ADDRESS":   "PO Box 12, Mount Colah NSW 2079",   # e.g. "PO Box 12, Mount Colah NSW 2079" — empty = hidden.
     "LINKEDIN":  "",   # e.g. "https://www.linkedin.com/company/thjp-enterprises" — empty = hidden.
     "CF_TOKEN":  "",   # Cloudflare Web Analytics token (free, cookie-free). Empty = no analytics.
@@ -69,7 +69,7 @@ def header(root, light=False):
 def footer(root):
     S = SETTINGS
     extra_contact = ''
-    if S["PHONE"]: extra_contact += f'\n        <li><a href="tel:{S["PHONE"].replace(" ", "")}">{S["PHONE"]}</a></li>'
+    if S["PHONE"]: extra_contact += f'\n        <li><a href="tel:+61{S["PHONE"].replace(" ", "")[1:]}">{S["PHONE"]}</a></li>'
     if S["ADDRESS"]: extra_contact += f'\n        <li>{S["ADDRESS"]}</li>'
     li_link = f'\n        <li><a href="{S["LINKEDIN"]}" target="_blank" rel="noopener">LinkedIn ↗</a></li>' if S["LINKEDIN"] else ''
     return f'''<footer class="site-footer">
@@ -117,14 +117,14 @@ def org_ld():
          "taxID":"56 696 226 203","areaServed":["AU","NZ"],
          "brand":[{"@type":"Brand","name":"Vinnie's Oil Australia","url":"https://vinniesoilaustralia.com"},{"@type":"Brand","name":"Arborean","url":"https://arborean.com.au"}],
          "sameAs":["https://vinniesoilaustralia.com","https://arborean.com.au","https://www.instagram.com/arboreanau/"]}
-    if S["PHONE"]: d["telephone"] = S["PHONE"]
+    if S["PHONE"]: d["telephone"] = "+61 " + S["PHONE"][1:]
     if S["ADDRESS"]: d["address"] = S["ADDRESS"]
     if S["LINKEDIN"]: d["sameAs"].append(S["LINKEDIN"])
     return '<script type="application/ld+json">' + _json.dumps(d, ensure_ascii=False) + '</script>'
 
 def extra_channels():
     S = SETTINGS; h = ''
-    if S["PHONE"]: h += f'<a class="channel" href="tel:{S["PHONE"].replace(" ", "")}"><span class="ico">{ICONS["phone"]}</span><span><small>Phone</small><b>{S["PHONE"]}</b></span></a>\n'
+    if S["PHONE"]: h += f'<a class="channel" href="tel:+61{S["PHONE"].replace(" ", "")[1:]}"><span class="ico">{ICONS["phone"]}</span><span><small>Phone</small><b>{S["PHONE"]}</b></span></a>\n'
     if S["LINKEDIN"]: h += f'<a class="channel" href="{S["LINKEDIN"]}" target="_blank" rel="noopener"><span class="ico">{ICONS["linkedin"]}</span><span><small>LinkedIn</small><b>THJP Enterprises</b></span></a>\n'
     if S["ADDRESS"]: h += f'<div class="channel"><span class="ico">{ICONS["pin"]}</span><span><small>Postal address</small><b>{S["ADDRESS"]}</b></span></div>\n'
     return h
