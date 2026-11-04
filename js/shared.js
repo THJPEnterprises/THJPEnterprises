@@ -83,26 +83,46 @@
       var r = form.querySelector('input[name="enquiry_type"][value="' + preset + '"]');
       if (r) r.checked = true;
     }
+    var resource = params.get('resource');
+    if (resource) {
+      var msg = form.querySelector('[name="message"]');
+      if (msg && !msg.value) msg.value = 'Please send me: ' + resource + '\n\nBusiness / stockist details: ';
+    }
     var okBox = document.getElementById('form-success');
     var errBox = document.getElementById('form-error');
+    var mailNote = document.getElementById('form-mailto-note');
     var btn = form.querySelector('button[type="submit"]');
     var btnHTML = btn ? btn.innerHTML : '';
+    var labels = { retailer: 'Stockist application', brand: 'Brand distribution', wholesale: 'Existing account', general: 'General enquiry' };
+    var skip = { access_key: 1, botcheck: 1, from_name: 1, subject: 1 };
+    function subjectFor(d) { return 'Website enquiry — ' + (labels[d.get('enquiry_type')] || 'General') + ' — ' + (d.get('company') || ''); }
+    function openMail(d) {
+      var lines = [];
+      d.forEach(function (v, k) { if (v && !skip[k]) lines.push(k.replace(/_/g, ' ') + ': ' + v); });
+      location.href = 'mailto:info@thjpenterprises.com?subject=' + encodeURIComponent(subjectFor(d)) + '&body=' + encodeURIComponent(lines.join('\n'));
+    }
+    var mailLink = document.getElementById('form-mailto');
+    if (mailLink) mailLink.addEventListener('click', function (e) { e.preventDefault(); openMail(new FormData(form)); });
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      okBox.classList.remove('show'); errBox.classList.remove('show');
+      [okBox, errBox, mailNote].forEach(function (b) { if (b) b.classList.remove('show'); });
       if (!form.reportValidity()) return;
       var data = new FormData(form);
-      if (data.get('_honey')) return; // bot
-      var labels = { retailer: 'Stockist application', brand: 'Brand distribution', wholesale: 'Existing account', general: 'General enquiry' };
-      data.set('_subject', 'Website enquiry — ' + (labels[data.get('enquiry_type')] || 'General') + ' — ' + (data.get('company') || ''));
+      if (data.get('botcheck')) return; // bot
+      data.set('subject', subjectFor(data));
+      data.set('replyto', data.get('email') || '');
+      var key = form.getAttribute('data-key');
+      if (!key) { openMail(data); mailNote.classList.add('show'); return; } // no key configured yet
       if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
-      fetch(form.getAttribute('action'), { method: 'POST', body: data, headers: { Accept: 'application/json' } })
+      var payload = {}; data.forEach(function (v, k) { payload[k] = v; });
+      fetch(form.getAttribute('action'), { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(payload) })
         .then(function (res) { return res.json().catch(function () { return {}; }).then(function (j) { return { ok: res.ok, j: j }; }); })
         .then(function (r) {
-          if (!r.ok || String(r.j.success) === 'false') throw new Error(r.j.message || 'Failed');
+          if (!r.ok || r.j.success === false) throw new Error(r.j.message || 'Failed');
           form.reset(); okBox.classList.add('show'); okBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         })
-        .catch(function () { errBox.classList.add('show'); })
+        .catch(function (err) { if (window.console) console.warn('Enquiry form:', err && err.message); errBox.classList.add('show'); })
         .then(function () { if (btn) { btn.disabled = false; btn.innerHTML = btnHTML; } });
     });
   }

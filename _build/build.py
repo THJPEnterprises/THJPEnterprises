@@ -22,14 +22,29 @@ ICONS = {
  "flag": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4M5 4h12l-2 4 2 4H5"/></svg>',
  "clock": '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
  "info": '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>',
+ "phone": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2"/></svg>',
+ "linkedin": '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.5M12 17v-4a2 2 0 014 0v4M12 10v7"/></svg>',
+ "pin": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-12a7 7 0 0114 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>',
+ "doc": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>',
+ "lock": '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>',
  "box": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/><path d="M3 7l9 4 9-4M12 11v10"/></svg>',
 }
 
 MARK = '<img class="brand-badge" src="{root}images/thjp-badge-64.png" srcset="{root}images/thjp-badge-64.png 1x, {root}images/thjp-badge-256.png 3x" width="46" height="46" alt="">'
 
 
+# ===================== SITE SETTINGS — fill these in, then run: python3 _build/build.py =====================
+SETTINGS = {
+    "W3F_KEY":   "",   # Web3Forms access key (free from web3forms.com, sent to info@thjpenterprises.com). Empty = form opens visitor's email app.
+    "PHONE":     "",   # e.g. "+61 2 0000 0000" — shown in footer, contact page and Google data. Empty = hidden.
+    "ADDRESS":   "",   # e.g. "PO Box 12, Mount Colah NSW 2079" — empty = hidden.
+    "LINKEDIN":  "",   # e.g. "https://www.linkedin.com/company/thjp-enterprises" — empty = hidden.
+    "CF_TOKEN":  "",   # Cloudflare Web Analytics token (free, cookie-free). Empty = no analytics.
+}
+# ==========================================================================================================
+
 NAV = [("index.html", "Home", ""), ("about.html", "About", "pages/"), ("brands.html", "Brands", "pages/"),
-       ("products.html", "Range", "pages/"), ("contact.html", "Contact", "pages/")]
+       ("products.html", "Range", "pages/"), ("resources.html", "Resources", "pages/"), ("contact.html", "Contact", "pages/")]
 
 def href(root, file, sub):
     if file == "index.html":
@@ -52,6 +67,11 @@ def header(root, light=False):
 <div class="mobile-menu" id="mobile-menu">{mlinks}<a class="btn" href="{root}pages/contact.html?type=retailer">Trade enquiries {ICONS['arrow']}</a></div>'''
 
 def footer(root):
+    S = SETTINGS
+    extra_contact = ''
+    if S["PHONE"]: extra_contact += f'\n        <li><a href="tel:{S["PHONE"].replace(" ", "")}">{S["PHONE"]}</a></li>'
+    if S["ADDRESS"]: extra_contact += f'\n        <li>{S["ADDRESS"]}</li>'
+    li_link = f'\n        <li><a href="{S["LINKEDIN"]}" target="_blank" rel="noopener">LinkedIn ↗</a></li>' if S["LINKEDIN"] else ''
     return f'''<footer class="site-footer">
   <div class="wrap">
     <div class="wordmark" aria-hidden="true">THJP</div>
@@ -65,16 +85,18 @@ def footer(root):
         <li><a href="{root}pages/about.html">About</a></li>
         <li><a href="{root}pages/brands.html">Brand portfolio</a></li>
         <li><a href="{root}pages/products.html">Product range</a></li>
-        <li><a href="{root}pages/contact.html">Contact</a></li></ul></div>
+        <li><a href="{root}pages/resources.html">Trade resources</a></li>
+        <li><a href="{root}pages/contact.html">Contact</a></li>
+        <li><a href="{root}pages/privacy.html">Privacy policy</a></li></ul></div>
       <div><h4>Work with us</h4><ul>
         <li><a href="{root}pages/contact.html?type=retailer">Become a stockist</a></li>
         <li><a href="{root}pages/contact.html?type=brand">Distribute your brand</a></li>
         <li><a href="{root}pages/contact.html?type=wholesale">Existing accounts</a></li>
-        <li><a href="mailto:info@thjpenterprises.com">info@thjpenterprises.com</a></li></ul></div>
+        <li><a href="mailto:info@thjpenterprises.com">info@thjpenterprises.com</a></li>{extra_contact}</ul></div>
       <div><h4>Group brands</h4><ul>
         <li><a href="https://vinniesoilaustralia.com" target="_blank" rel="noopener">Vinnie&rsquo;s Oil Australia ↗</a></li>
         <li><a href="https://arborean.com.au" target="_blank" rel="noopener">Arborean ↗</a></li>
-        <li><a href="https://www.instagram.com/arboreanau/" target="_blank" rel="noopener">@arboreanau ↗</a></li></ul></div>
+        <li><a href="https://www.instagram.com/arboreanau/" target="_blank" rel="noopener">@arboreanau ↗</a></li>{li_link}</ul></div>
     </div>
     <div class="foot-bottom">
       <span>&copy; <span data-year>2026</span> THJP Enterprises Pty Ltd · ABN 56 696 226 203</span>
@@ -86,21 +108,36 @@ def footer(root):
 SITE = "https://thjpenterprises.com/"
 import time
 VER = time.strftime("%Y%m%d%H%M")  # cache-buster so visitors always get the latest CSS/JS
-ORG_LD = """<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Organization","name":"THJP Enterprises Pty Ltd","url":"https://thjpenterprises.com/",
-"logo":"https://thjpenterprises.com/images/thjp-badge-640.png","email":"info@thjpenterprises.com",
-"description":"Australian-owned importer, brand manager and trade distributor of premium woodcraft brands.",
-"taxID":"56 696 226 203","areaServed":["AU","NZ"],
-"brand":[{"@type":"Brand","name":"Vinnie's Oil Australia","url":"https://vinniesoilaustralia.com"},{"@type":"Brand","name":"Arborean","url":"https://arborean.com.au"}],
-"sameAs":["https://vinniesoilaustralia.com","https://arborean.com.au","https://www.instagram.com/arboreanau/"]}
-</script>"""
+import json as _json
+def org_ld():
+    S = SETTINGS
+    d = {"@context":"https://schema.org","@type":"Organization","name":"THJP Enterprises Pty Ltd","url":SITE,
+         "logo":SITE+"images/thjp-badge-640.png","email":"info@thjpenterprises.com",
+         "description":"Australian-owned importer, brand manager and trade distributor of premium woodcraft brands.",
+         "taxID":"56 696 226 203","areaServed":["AU","NZ"],
+         "brand":[{"@type":"Brand","name":"Vinnie's Oil Australia","url":"https://vinniesoilaustralia.com"},{"@type":"Brand","name":"Arborean","url":"https://arborean.com.au"}],
+         "sameAs":["https://vinniesoilaustralia.com","https://arborean.com.au","https://www.instagram.com/arboreanau/"]}
+    if S["PHONE"]: d["telephone"] = S["PHONE"]
+    if S["ADDRESS"]: d["address"] = S["ADDRESS"]
+    if S["LINKEDIN"]: d["sameAs"].append(S["LINKEDIN"])
+    return '<script type="application/ld+json">' + _json.dumps(d, ensure_ascii=False) + '</script>'
+
+def extra_channels():
+    S = SETTINGS; h = ''
+    if S["PHONE"]: h += f'<a class="channel" href="tel:{S["PHONE"].replace(" ", "")}"><span class="ico">{ICONS["phone"]}</span><span><small>Phone</small><b>{S["PHONE"]}</b></span></a>\n'
+    if S["LINKEDIN"]: h += f'<a class="channel" href="{S["LINKEDIN"]}" target="_blank" rel="noopener"><span class="ico">{ICONS["linkedin"]}</span><span><small>LinkedIn</small><b>THJP Enterprises</b></span></a>\n'
+    if S["ADDRESS"]: h += f'<div class="channel"><span class="ico">{ICONS["pin"]}</span><span><small>Postal address</small><b>{S["ADDRESS"]}</b></span></div>\n'
+    return h
 
 def page(name, title, desc, root, body, light=False):
     body = re.sub(r"\{\{icon:(\w+)\}\}", lambda m: ICONS[m.group(1)], body)
     body = body.replace("{{V}}", V).replace("{{A}}", A).replace("{{ROOT}}", root)
     canon = '' if name == '404.html' else f'<link rel="canonical" href="{SITE}{'' if name == 'index.html' else name}">\n<meta property="og:url" content="{SITE}{'' if name == 'index.html' else name}">'
     if name == '404.html': canon = '<meta name="robots" content="noindex">'
-    ld = ORG_LD if name == 'index.html' else ''
+    ld = org_ld() if name == 'index.html' else ''
+    if SETTINGS["CF_TOKEN"]:
+        ld += '\n<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon=\'{"token": "' + SETTINGS["CF_TOKEN"] + '"}\'></script>'
+    body = body.replace("<!--EXTRA_CHANNELS-->", extra_channels()).replace("{{W3F_KEY}}", SETTINGS["W3F_KEY"])
     return f'''<!DOCTYPE html>
 <html lang="en-AU">
 <head>
@@ -143,6 +180,10 @@ PAGES = [
   "The THJP Enterprises brand portfolio: Vinnie's Oil Australia, Arborean, and the next international brands we are bringing to Australia."),
  ("pages/products.html", "../", "Product Range — THJP Enterprises",
   "The trade range distributed by THJP Enterprises — Vinnie's Oil hardwax oils and waxes, plus woodturning, pen-making, hand tool and workshop categories."),
+ ("pages/resources.html", "../", "Trade Resources — THJP Enterprises",
+  "Safety Data Sheets, application guides, catalogues and trade price lists for THJP Enterprises stockists."),
+ ("pages/privacy.html", "../", "Privacy Policy — THJP Enterprises",
+  "How THJP Enterprises Pty Ltd collects, uses and protects personal information."),
  ("pages/contact.html", "../", "Trade Enquiries — THJP Enterprises",
   "Apply to become a stockist, discuss Australian distribution for your brand, or contact THJP Enterprises about an existing trade account."),
  ("404.html", "/", "Page not found — THJP Enterprises", "This page could not be found."),

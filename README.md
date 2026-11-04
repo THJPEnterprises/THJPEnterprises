@@ -9,6 +9,8 @@ index.html            Home
 pages/about.html      About
 pages/brands.html     Brand portfolio (Vinnie's Oil Australia, Arborean, brand partnerships)
 pages/products.html   Trade range
+pages/resources.html  Trade resources (SDS downloads, guides, request-only trade documents)
+pages/privacy.html    Privacy policy
 pages/contact.html    Trade enquiry form (?type=retailer|brand|wholesale|general preselects the enquiry type)
 css/style.css         All styling — colours/fonts are tokens at the top under :root
 js/shared.js          Header, mobile menu, scroll reveals, counters, contact form
@@ -32,10 +34,16 @@ Vinnie's Oil photos are optimised copies (1400px, ~250–400 KB) in `images/web/
 `images/thjp-badge-*.png`. The Arborean workshop photo is loaded from arborean.com.au. If any image fails,
 its card falls back to a styled placeholder.
 
+## Site settings
+Open `_build/build.py` and fill in the `SETTINGS` block at the top, then run `python3 _build/build.py`:
+- `W3F_KEY` — Web3Forms access key. Enquiries are then emailed straight to info@thjpenterprises.com.
+  Without a key the form falls back to opening the visitor's email app.
+- `PHONE`, `ADDRESS`, `LINKEDIN` — shown in the footer, on the contact page and in Google's company data when set.
+- `CF_TOKEN` — Cloudflare Web Analytics token (free, no cookies).
+
 ## Contact form
-Enquiries are sent straight to info@thjpenterprises.com via FormSubmit (free, no account).
-**One-time activation:** submit a test enquiry on the live site, then click "Activate Form" in the email
-FormSubmit sends to info@thjpenterprises.com. Each enquiry arrives as a formatted table; the sender gets an
-automatic confirmation; a hidden honeypot field filters basic spam bots.
+Uses Web3Forms (free tier: 250 enquiries/month). If sending fails, visitors are offered a one-click
+"send it by email instead" with their details pre-filled. Resource links (e.g. `contact.html?type=wholesale&resource=Price%20list`)
+pre-fill the message with the document being requested.
 
 THJP Enterprises Pty Ltd · ABN 56 696 226 203 · Trade and wholesale only.

@@ -14,6 +14,7 @@
       <h2 class="h2 mt-s" style="font-size:clamp(32px,4vw,52px)">Reach the<br>team.</h2>
       <div class="channels">
         <a class="channel" href="mailto:info@thjpenterprises.com"><span class="ico">{{icon:mail}}</span><span><small>Email</small><b>info@thjpenterprises.com</b></span></a>
+        <!--EXTRA_CHANNELS-->
         <a class="channel" href="https://vinniesoilaustralia.com" target="_blank" rel="noopener"><span class="ico">{{icon:box}}</span><span><small>Vinnie&rsquo;s Oil Australia</small><b>vinniesoilaustralia.com</b></span></a>
         <a class="channel" href="https://arborean.com.au" target="_blank" rel="noopener"><span class="ico">{{icon:globe}}</span><span><small>Arborean</small><b>arborean.com.au</b></span></a>
         <a class="channel" href="https://www.instagram.com/arboreanau/" target="_blank" rel="noopener"><span class="ico">{{icon:insta}}</span><span><small>Instagram</small><b>@arboreanau</b></span></a>
@@ -22,14 +23,13 @@
     </div>
 
     <div class="form-card reveal d1">
-      <!-- Submissions are delivered to info@thjpenterprises.com via FormSubmit (formsubmit.co).
-           One-time setup: send a test enquiry, then click "Activate Form" in the email FormSubmit sends to that inbox. -->
-      <form id="contact-form" action="https://formsubmit.co/ajax/info@thjpenterprises.com" method="POST" novalidate>
-        <input type="hidden" name="_subject" value="Website enquiry — THJP Enterprises">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_autoresponse" value="Thanks for contacting THJP Enterprises. We've received your enquiry and will reply within two business days. — THJP Enterprises Pty Ltd">
-        <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>
+      <!-- Submissions are delivered to info@thjpenterprises.com via Web3Forms (web3forms.com).
+           The access key is set in _build/build.py (SETTINGS["W3F_KEY"]). Without a key the form opens the visitor's email app instead. -->
+      <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" data-key="{{W3F_KEY}}" novalidate>
+        <input type="hidden" name="access_key" value="{{W3F_KEY}}">
+        <input type="hidden" name="subject" value="Website enquiry — THJP Enterprises">
+        <input type="hidden" name="from_name" value="THJP Enterprises website">
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         <span class="field"><label>What can we help with?</label></span>
         <div class="types" role="radiogroup">
           <label><input type="radio" name="enquiry_type" value="retailer" checked><span>Become a stockist<small>Stock our brands in your business</small></span></label>
@@ -50,11 +50,12 @@
           <div class="field full"><label for="f-msg">Message *</label><textarea id="f-msg" name="message" required placeholder="Tell us about your business, location and what you're interested in."></textarea></div>
         </div>
         <div class="form-foot">
-          <p>Business enquiries only. By submitting you agree to be contacted by THJP Enterprises about your enquiry.</p>
+          <p>Business enquiries only. By submitting you agree to be contacted by THJP Enterprises about your enquiry. See our <a href="{{ROOT}}pages/privacy.html">privacy policy</a>.</p>
           <button class="btn" type="submit">Send enquiry {{icon:arrow}}</button>
         </div>
-        <div class="form-success" id="form-success" role="status"><b>Thanks — your enquiry has been sent.</b> We&rsquo;ll reply within two business days. A confirmation has been emailed to you.</div>
-        <div class="form-error" id="form-error" role="alert"><b>Sorry — that didn&rsquo;t send.</b> Please email us directly at <a href="mailto:info@thjpenterprises.com">info@thjpenterprises.com</a> and we&rsquo;ll get straight back to you.</div>
+        <div class="form-success" id="form-mailto-note" role="status"><b>Your email app should now open</b> with your enquiry ready to send to info@thjpenterprises.com. If it didn&rsquo;t, email us directly.</div>
+        <div class="form-success" id="form-success" role="status"><b>Thanks — your enquiry has been sent.</b> We&rsquo;ll reply within two business days.</div>
+        <div class="form-error" id="form-error" role="alert"><b>Sorry — that didn&rsquo;t send.</b> Your details are still filled in. <a href="#" id="form-mailto">Send it by email instead</a>, or write to <a href="mailto:info@thjpenterprises.com">info@thjpenterprises.com</a>.</div>
       </form>
     </div>
   </div>
