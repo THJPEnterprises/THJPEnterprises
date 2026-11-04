@@ -1,0 +1,73 @@
+<section class="page-hero dark grid-bg">
+  <div class="wrap">
+    <div class="crumbs"><a href="{{ROOT}}index.html">Home</a> / Contact</div>
+    <span class="eyebrow">Trade enquiries</span>
+    <h1>Let&rsquo;s<br><span class="accent">talk trade.</span></h1>
+    <p class="lead">Stockist applications, brand distribution and account enquiries. We reply to every business enquiry within two business days.</p>
+  </div>
+</section>
+
+<section class="section bone">
+  <div class="wrap contact-grid">
+    <div class="reveal">
+      <span class="eyebrow">Direct lines</span>
+      <h2 class="h2 mt-s" style="font-size:clamp(32px,4vw,52px)">Reach the<br>team.</h2>
+      <div class="channels">
+        <a class="channel" href="mailto:info@thjpenterprises.com"><span class="ico">{{icon:mail}}</span><span><small>Email</small><b>info@thjpenterprises.com</b></span></a>
+        <a class="channel" href="https://vinniesoilaustralia.com" target="_blank" rel="noopener"><span class="ico">{{icon:box}}</span><span><small>Vinnie&rsquo;s Oil Australia</small><b>vinniesoilaustralia.com</b></span></a>
+        <a class="channel" href="https://arborean.com.au" target="_blank" rel="noopener"><span class="ico">{{icon:globe}}</span><span><small>Arborean</small><b>arborean.com.au</b></span></a>
+        <a class="channel" href="https://www.instagram.com/arboreanau/" target="_blank" rel="noopener"><span class="ico">{{icon:insta}}</span><span><small>Instagram</small><b>@arboreanau</b></span></a>
+      </div>
+      <div class="note"><b>Trade only.</b> THJP Enterprises supplies businesses, not individual consumers. Looking to buy for yourself? Find a stockist via <a href="https://vinniesoilaustralia.com" target="_blank" rel="noopener">vinniesoilaustralia.com</a>.</div>
+    </div>
+
+    <div class="form-card reveal d1">
+      <!-- Submissions are delivered to info@thjpenterprises.com via FormSubmit (formsubmit.co).
+           One-time setup: send a test enquiry, then click "Activate Form" in the email FormSubmit sends to that inbox. -->
+      <form id="contact-form" action="https://formsubmit.co/ajax/info@thjpenterprises.com" method="POST" novalidate>
+        <input type="hidden" name="_subject" value="Website enquiry — THJP Enterprises">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_autoresponse" value="Thanks for contacting THJP Enterprises. We've received your enquiry and will reply within two business days. — THJP Enterprises Pty Ltd">
+        <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>
+        <span class="field"><label>What can we help with?</label></span>
+        <div class="types" role="radiogroup">
+          <label><input type="radio" name="enquiry_type" value="retailer" checked><span>Become a stockist<small>Stock our brands in your business</small></span></label>
+          <label><input type="radio" name="enquiry_type" value="brand"><span>Brand distribution<small>Bring your brand to Australia</small></span></label>
+          <label><input type="radio" name="enquiry_type" value="wholesale"><span>Existing account<small>Orders, supply or support</small></span></label>
+          <label><input type="radio" name="enquiry_type" value="general"><span>General<small>Anything else business-related</small></span></label>
+        </div>
+        <div class="fields">
+          <div class="field"><label for="f-first">First name *</label><input id="f-first" name="first_name" required autocomplete="given-name"></div>
+          <div class="field"><label for="f-last">Last name *</label><input id="f-last" name="last_name" required autocomplete="family-name"></div>
+          <div class="field full"><label for="f-co">Business name *</label><input id="f-co" name="company" required autocomplete="organization"></div>
+          <div class="field"><label for="f-email">Email *</label><input id="f-email" type="email" name="email" required autocomplete="email"></div>
+          <div class="field"><label for="f-phone">Phone</label><input id="f-phone" type="tel" name="phone" autocomplete="tel"></div>
+          <div class="field"><label for="f-state">State / region</label>
+            <select id="f-state" name="state"><option value="">Select…</option><option>New South Wales</option><option>Victoria</option><option>Queensland</option><option>Western Australia</option><option>South Australia</option><option>Tasmania</option><option>ACT</option><option>Northern Territory</option><option>New Zealand</option><option>International</option></select></div>
+          <div class="field"><label for="f-type">Business type</label>
+            <select id="f-type" name="business_type"><option value="">Select…</option><option>Woodworking / timber specialist</option><option>Hardware / trade store</option><option>Craft / hobby store</option><option>Flooring specialist</option><option>Online retailer</option><option>Manufacturer / brand owner</option><option>Other</option></select></div>
+          <div class="field full"><label for="f-msg">Message *</label><textarea id="f-msg" name="message" required placeholder="Tell us about your business, location and what you're interested in."></textarea></div>
+        </div>
+        <div class="form-foot">
+          <p>Business enquiries only. By submitting you agree to be contacted by THJP Enterprises about your enquiry.</p>
+          <button class="btn" type="submit">Send enquiry {{icon:arrow}}</button>
+        </div>
+        <div class="form-success" id="form-success" role="status"><b>Thanks — your enquiry has been sent.</b> We&rsquo;ll reply within two business days. A confirmation has been emailed to you.</div>
+        <div class="form-error" id="form-error" role="alert"><b>Sorry — that didn&rsquo;t send.</b> Please email us directly at <a href="mailto:info@thjpenterprises.com">info@thjpenterprises.com</a> and we&rsquo;ll get straight back to you.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="section dark">
+  <div class="wrap split">
+    <div><span class="eyebrow">FAQ</span><h2 class="h2 mt-s">Before<br>you ask.</h2></div>
+    <div class="faq">
+      <details><summary>Can I buy directly from THJP Enterprises?</summary><p>No — we&rsquo;re a wholesale importer and distributor. Individual customers can buy our brands from authorised stockists. Vinnie&rsquo;s Oil stockists are listed at vinniesoilaustralia.com.</p></details>
+      <details><summary>What do stockists receive?</summary><p>Wholesale pricing and margin support, product training, point-of-sale materials, brand assets, a stockist directory listing and a direct account contact.</p></details>
+      <details><summary>Do you work with brands outside Europe?</summary><p>Yes. We work with domestic and international manufacturers of all sizes — what matters is quality, consistent supply and a good fit with the Australian market.</p></details>
+      <details><summary>Do you supply New Zealand?</summary><p>Yes, we supply trade partners across Australia and New Zealand. Get in touch to discuss your region.</p></details>
+    </div>
+  </div>
+</section>

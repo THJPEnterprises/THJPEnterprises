@@ -1,6 +1,5 @@
-# THJP Enterprises — GitHub Pages Configuration
+# THJP Enterprises — GitHub Pages configuration
 title: "THJP Enterprises Pty Ltd"
-description: "Australian-owned B2B importer and distributor of premium woodworking products."
-url: ""
-baseurl: ""
+description: "Australian-owned importer, brand manager and trade distributor of premium woodcraft brands."
 theme: null
+exclude: [_build, README.md]

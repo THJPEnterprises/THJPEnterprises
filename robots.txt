@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://thjpenterprises.com/sitemap.xml
