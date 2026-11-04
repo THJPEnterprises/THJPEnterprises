@@ -84,6 +84,8 @@ def footer(root):
 </footer>'''
 
 SITE = "https://thjpenterprises.com/"
+import time
+VER = time.strftime("%Y%m%d%H%M")  # cache-buster so visitors always get the latest CSS/JS
 ORG_LD = """<script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization","name":"THJP Enterprises Pty Ltd","url":"https://thjpenterprises.com/",
 "logo":"https://thjpenterprises.com/images/thjp-badge-640.png","email":"info@thjpenterprises.com",
@@ -118,7 +120,7 @@ def page(name, title, desc, root, body, light=False):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,100..125,400..900;1,100..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{root}css/style.css">
+<link rel="stylesheet" href="{root}css/style.css?v={VER}">
 {ld}
 </head>
 <body>
@@ -127,7 +129,7 @@ def page(name, title, desc, root, body, light=False):
 {body}
 </main>
 {footer(root)}
-<script src="{root}js/shared.js"></script>
+<script src="{root}js/shared.js?v={VER}"></script>
 </body>
 </html>
 '''
