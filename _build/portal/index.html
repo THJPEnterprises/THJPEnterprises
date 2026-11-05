@@ -1,0 +1,106 @@
+<!--TITLE:Dashboard-->
+<body class="portal">
+<div id="gate" class="gate"><div class="gate-card"><p>Loading…</p></div></div>
+<main id="app" class="pmain" hidden>
+  <div class="phead">
+    <div><span class="eyebrow">Stockist dashboard</span><h1 id="hello">Welcome back</h1></div>
+    <div id="tier-pill"></div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><small>Your tier</small><b class="gold" id="k-tier">—</b></div>
+    <div class="kpi"><small>Your margin off RRP</small><b id="k-margin">—</b></div>
+    <div class="kpi"><small>Minimum order</small><b id="k-moq">—</b></div>
+    <div class="kpi"><small>Open orders</small><b id="k-open">—</b></div>
+  </div>
+
+  <div class="cta-strip">
+    <div><h2>Ready to restock?</h2><p>Place an order on account. We&rsquo;ll invoice your business, with no card needed.</p></div>
+    <a class="btn" href="order.html">Place an order →</a>
+  </div>
+
+  <section class="card">
+    <div class="card-head"><div><h2>Your price list</h2><p class="card-sub" style="margin:0">Prices include GST and already have your tier margin applied.</p></div>
+      <input id="search" type="search" placeholder="Search products or SKU…" aria-label="Search products" style="max-width:280px;font:inherit;padding:10px 14px;border:1.5px solid var(--rule);border-radius:999px;">
+    </div>
+    <div class="tbl-wrap"><table class="tbl" id="prices">
+      <thead><tr><th>Product</th><th>SKU</th><th>Size</th><th class="num">RRP</th><th class="num">Your price</th></tr></thead>
+      <tbody><tr><td colspan="5" class="empty">Loading…</td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section class="card">
+    <h2>Dealer resources</h2>
+    <p class="card-sub">Safety Data Sheets, price lists, marketing kits and training material.</p>
+    <div class="res-grid" id="res"><p class="empty">Loading…</p></div>
+  </section>
+
+  <section class="card">
+    <h2>Product images</h2>
+    <p class="card-sub">High-resolution photography for your website, socials and in-store displays.</p>
+    <div class="gallery" id="gal"><p class="empty">Loading…</p></div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var api = P.api, esc = P.esc, money = P.money, $ = P.$;
+  P.guard({ active: 'index.html' }).then(function (me) {
+    $('#hello').textContent = 'G’day' + (me.contact_name ? ', ' + me.contact_name : '');
+    Promise.all([api.tiers(), api.products(), api.resources(), api.myOrders()]).then(function (r) {
+      var tier = r[0].find(function (t) { return t.tier === me.tier; }) || r[0][0];
+      $('#k-tier').textContent = tier.label;
+      $('#k-margin').textContent = Number(tier.discount_pct) + '%';
+      $('#k-moq').textContent = tier.min_order_qty + ' units';
+      $('#k-open').textContent = r[3].filter(function (o) { return o.status !== 'shipped' && o.status !== 'cancelled'; }).length;
+      $('#tier-pill').innerHTML = '<span class="tier-pill">' + esc(me.business_name || me.email) + ' · <b>' + esc(tier.label) + '</b>' + (tier.free_shipping ? ' · free shipping' : '') + '</span>';
+      renderPrices(r[1], tier);
+      renderResources(r[2]);
+    }).catch(function (e) { P.toast('Could not load your dashboard: ' + e.message, 'error'); });
+  });
+
+  var allProducts = [], curTier;
+  function renderPrices(products, tier) {
+    allProducts = products; curTier = tier; draw('');
+  }
+  function draw(q) {
+    q = q.toLowerCase();
+    var list = allProducts.filter(function (p) { return !q || (p.product_name + ' ' + p.sku + ' ' + p.brand).toLowerCase().indexOf(q) > -1; });
+    var body = $('#prices tbody');
+    if (!list.length) { body.innerHTML = '<tr><td colspan="5" class="empty">' + (q ? 'No products match “' + esc(q) + '”.' : 'No products published yet.') + '</td></tr>'; return; }
+    body.innerHTML = P.groupBy(list, 'brand').map(function (g) {
+      return '<tr class="brand-row"><td colspan="5">' + esc(g.key) + '<span>' + g.items.length + ' products</span></td></tr>' + g.items.map(function (p) {
+        var yours = P.tierPrice(p.rrp_aud, curTier.discount_pct);
+        return '<tr><td>' + esc(p.product_name) + (p.has_sizes ? ' <span class="badge-s">' + esc(p.available_sizes) + '</span>' : '') + '</td><td class="sku">' + esc(p.sku) + '</td><td>' + esc(p.size || '—') + '</td>' +
+          '<td class="num strike">' + (p.rrp_aud == null ? '—' : money(p.rrp_aud)) + '</td>' +
+          '<td class="num price-you">' + (yours == null ? '<span class="na">Price coming soon</span>' : money(yours)) + '</td></tr>';
+      }).join('');
+    }).join('');
+  }
+  $('#search').addEventListener('input', function (e) { draw(e.target.value); });
+
+  var CAT = { sds: 'SDS', 'spec-sheet': 'Spec', 'price-list': 'Price', marketing: 'POS', training: 'Train', general: 'File' };
+  function renderResources(list) {
+    var docs = list.filter(function (r) { return r.category !== 'product-images'; });
+    var imgs = list.filter(function (r) { return r.category === 'product-images'; });
+    $('#res').innerHTML = docs.length ? '' : '<p class="empty">No resources published yet.</p>';
+    $('#gal').innerHTML = imgs.length ? '' : '<p class="empty">No product images published yet.</p>';
+    docs.forEach(function (r) {
+      api.fileUrl(r.file_path).then(function (url) {
+        var a = document.createElement('a'); a.className = 'rcard'; a.href = url; a.target = '_blank'; a.rel = 'noopener';
+        a.innerHTML = '<span class="ri">' + esc(CAT[r.category] || 'File') + '</span><span><b>' + esc(r.title) + '</b><small>' + esc([r.brand, r.description].filter(Boolean).join(' · ')) + '</small></span><span class="go">Open ↗</span>';
+        $('#res').appendChild(a);
+      });
+    });
+    imgs.forEach(function (r) {
+      api.fileUrl(r.file_path).then(function (url) {
+        var d = document.createElement('div'); d.className = 'gitem';
+        d.innerHTML = '<a href="' + esc(url) + '" target="_blank" rel="noopener"><img src="' + esc(url) + '" alt="' + esc(r.title) + '" loading="lazy"></a><div><span>' + esc(r.title) + '</span><a href="' + esc(url) + '" download>Download</a></div>';
+        $('#gal').appendChild(d);
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

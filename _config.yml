@@ -2,4 +2,4 @@
 title: "THJP Enterprises Pty Ltd"
 description: "Australian-owned importer, brand manager and trade distributor of premium woodcraft brands."
 theme: null
-exclude: [_build, README.md]
+exclude: [_build, supabase, README.md]

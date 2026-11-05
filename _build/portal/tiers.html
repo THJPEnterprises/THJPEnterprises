@@ -1,0 +1,30 @@
+<!--TITLE:Tiers-->
+<body class="portal">
+<div id="gate" class="gate"><div class="gate-card"><p>Loading…</p></div></div>
+<main id="app" class="pmain" hidden>
+  <div class="phead">
+    <div><span class="eyebrow">Trade tiers</span><h1>Tiers &amp; benefits</h1></div>
+  </div>
+  <p class="muted-s" style="max-width:70ch;margin:-8px 0 22px">Your tier sets your margin off RRP, your minimum order and shipping benefits. Tiers are reviewed based on your typical order volume. Talk to us if your ordering has grown.</p>
+  <div class="values" id="tiers"></div>
+</main>
+<script>
+(function () {
+  var esc = P.esc;
+  P.guard({ active: 'tiers.html' }).then(function (me) {
+    P.api.tiers().then(function (tiers) {
+      P.$('#tiers').innerHTML = tiers.map(function (t) {
+        var mine = t.tier === me.tier;
+        return '<div class="value" style="' + (mine ? 'border:2px solid var(--signal);' : '') + '">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><span class="badge-s ' + (mine ? 'admin' : '') + '">' + (mine ? 'Your tier' : 'Tier ' + t.tier) + '</span>' + (t.free_shipping ? '<span class="badge-s ok">Free shipping</span>' : '') + '</div>' +
+          '<h3 style="font-size:28px;font-style:italic;font-weight:900;text-transform:uppercase">' + esc(t.label) + '</h3>' +
+          '<p style="font-size:34px;font-weight:900;font-stretch:120%;color:var(--gold-ink);margin:6px 0">' + Number(t.discount_pct) + '%<small style="font-size:13px;color:var(--slate);font-weight:500"> margin off RRP</small></p>' +
+          '<p><b>Minimum order:</b> ' + t.min_order_qty + ' units</p>' +
+          '<ul style="padding-left:18px;margin:10px 0 0;color:var(--slate)">' + String(t.benefits || '').split('\n').filter(Boolean).map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul></div>';
+      }).join('');
+    });
+  });
+})();
+</script>
+</body>
+</html>

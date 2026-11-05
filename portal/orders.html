@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0A1711">
+<title>My orders — THJP Stockist Portal</title>
+<link rel="icon" type="image/png" href="../images/thjp-badge-64.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,100..125,400..900;1,100..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=202611051711">
+<link rel="stylesheet" href="../css/portal.css?v=202611051711">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../js/portal-config.js?v=202611051711"></script>
+<script src="../js/portal.js?v=202611051711"></script>
+</head>
+<body class="portal">
+<div id="gate" class="gate"><div class="gate-card"><p>Loading…</p></div></div>
+<main id="app" class="pmain" hidden>
+  <div class="phead">
+    <div><span class="eyebrow">Order history</span><h1>My orders</h1></div>
+    <a class="btn" href="order.html">Place an order →</a>
+  </div>
+  <div id="list"><p class="empty">Loading…</p></div>
+</main>
+
+<script>
+(function () {
+  var esc = P.esc, money = P.money, $ = P.$;
+  P.guard({ active: 'orders.html' }).then(function () {
+    P.api.myOrders().then(function (orders) {
+      var list = $('#list');
+      if (!orders.length) { list.innerHTML = '<div class="card empty">You haven&rsquo;t placed any orders yet. <a href="order.html" style="color:var(--gold-ink);font-weight:600">Place your first order →</a></div>'; return; }
+      list.innerHTML = orders.map(function (o) {
+        var ship = o.shipping_aud == null ? 'To be confirmed' : Number(o.shipping_aud) === 0 ? 'Free' : money(o.shipping_aud);
+        var grand = Number(o.total_inc_gst_aud) + Number(o.shipping_aud || 0);
+        return '<div class="ocard" id="o' + o.id + '"><button class="ohead" aria-expanded="false">' +
+          '<span><b>' + esc(o.order_number) + ' · PO ' + esc(o.po_number) + '</b><small>' + P.date(o.created_at) + '</small></span>' +
+          '<span class="hide-s"><b>' + money(grand) + '</b><small>' + o.total_qty + ' units · shipping ' + esc(ship) + '</small></span>' +
+          '<span class="hide-s">' + (o.tracking ? '<small>Tracking</small><b style="font-size:14px">' + esc(o.tracking) + '</b>' : '') + '</span>' +
+          P.statusChip(o.status) + '</button>' +
+          '<div class="obody" hidden><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Product</th><th>Size</th><th class="num">Unit</th><th class="num">Qty</th><th class="num">Total</th></tr></thead><tbody>' +
+          o.items.map(function (i) { return '<tr><td>' + esc(i.product_name) + '<div class="sku">' + esc(i.brand || '') + ' · ' + esc(i.sku) + '</div></td><td>' + esc(i.size || '—') + '</td><td class="num">' + money(i.unit_price_aud) + '</td><td class="num">' + i.qty + '</td><td class="num">' + money(i.line_total_aud) + '</td></tr>'; }).join('') +
+          '<tr><td colspan="4" class="num">Products (inc. GST)</td><td class="num"><b>' + money(o.total_inc_gst_aud) + '</b></td></tr>' +
+          '<tr><td colspan="4" class="num">GST included</td><td class="num">' + money(o.gst_aud) + '</td></tr>' +
+          '<tr><td colspan="4" class="num">Shipping</td><td class="num">' + esc(ship) + '</td></tr>' +
+          '</tbody></table></div>' + (o.notes ? '<p class="muted-s"><b>Your notes:</b> ' + esc(o.notes) + '</p>' : '') + '</div></div>';
+      }).join('');
+      P.$all('.ohead').forEach(function (h) { h.addEventListener('click', function () { var b = h.nextElementSibling; b.hidden = !b.hidden; h.setAttribute('aria-expanded', String(!b.hidden)); }); });
+      var target = location.hash && document.querySelector(location.hash);
+      if (target) { target.querySelector('.ohead').click(); target.scrollIntoView({ block: 'start' }); }
+    }).catch(function (e) { $('#list').innerHTML = '<div class="card empty">Could not load orders: ' + esc(e.message) + '</div>'; });
+  });
+})();
+</script>
+</body>
+</html>

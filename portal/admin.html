@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0A1711">
+<title>Admin — THJP Stockist Portal</title>
+<link rel="icon" type="image/png" href="../images/thjp-badge-64.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,100..125,400..900;1,100..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=202611051711">
+<link rel="stylesheet" href="../css/portal.css?v=202611051711">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../js/portal-config.js?v=202611051711"></script>
+<script src="../js/portal.js?v=202611051711"></script>
+</head>
+<body class="portal">
+<div id="gate" class="gate"><div class="gate-card"><p>Loading…</p></div></div>
+<main id="app" class="pmain wide" hidden>
+  <div class="phead"><div><span class="eyebrow">THJP Enterprises</span><h1>Admin</h1></div></div>
+  <div class="tabs" role="tablist">
+    <button class="on" data-tab="orders">Orders <span class="count" id="c-orders" hidden></span></button>
+    <button data-tab="stockists">Stockists <span class="count" id="c-pending" hidden></span></button>
+    <button data-tab="products">Products &amp; pricing</button>
+    <button data-tab="tiers">Tiers</button>
+    <button data-tab="resources">Resources</button>
+  </div>
+
+  <!-- ORDERS -->
+  <section data-panel="orders">
+    <div class="card">
+      <div class="card-head"><h2>Orders</h2>
+        <select id="o-filter" style="font:inherit;padding:9px 12px;border:1.5px solid var(--rule);border-radius:999px"><option value="open">Open orders</option><option value="all">All orders</option><option value="shipped">Shipped</option><option value="cancelled">Cancelled</option></select>
+      </div>
+      <div id="o-list"><p class="empty">Loading…</p></div>
+    </div>
+  </section>
+
+  <!-- STOCKISTS -->
+  <section data-panel="stockists" hidden>
+    <div class="card">
+      <div class="card-head"><div><h2>Stockist accounts</h2><p class="card-sub" style="margin:0">Approve accounts, set tiers and regions, or reset two-factor for someone who lost their phone.</p></div><button class="btn small" id="b-new-user">+ New account</button></div>
+      <div class="tbl-wrap"><table class="tbl" id="u-tbl"><thead><tr><th>Business</th><th>Contact</th><th>State / region</th><th>Tier</th><th>Role</th><th>Approved</th><th></th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section data-panel="products" hidden>
+    <div class="card">
+      <div class="card-head"><div><h2>Products &amp; pricing</h2><p class="card-sub" style="margin:0">Set the RRP (inc. GST). Each stockist&rsquo;s price is RRP minus their tier margin. Products without an RRP can&rsquo;t be ordered.</p></div><button class="btn small" id="b-new-prod">+ Add product</button></div>
+      <div class="tbl-wrap"><table class="tbl" id="p-tbl"><thead></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- TIERS -->
+  <section data-panel="tiers" hidden>
+    <div class="card">
+      <h2>Tiers</h2><p class="card-sub">Margin is the discount off RRP. Minimum order is total units per order, any mix of products.</p>
+      <div class="tbl-wrap"><table class="tbl" id="t-tbl"><thead><tr><th>#</th><th>Name</th><th class="num">Margin %</th><th class="num">Min units</th><th>Free shipping</th><th>Benefits (one per line)</th><th></th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- RESOURCES -->
+  <section data-panel="resources" hidden>
+    <div class="card">
+      <div class="card-head"><div><h2>Dealer resources</h2><p class="card-sub" style="margin:0">Files are private to signed-in, approved stockists. Use the &ldquo;Product images&rdquo; category for the photo gallery.</p></div><button class="btn small" id="b-new-res">+ Add resource</button></div>
+      <div class="tbl-wrap"><table class="tbl" id="r-tbl"><thead><tr><th>Title</th><th>Brand</th><th>Category</th><th>File</th><th></th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+</main>
+
+<!-- dialogs -->
+<dialog class="modal" id="d-user"><form class="modal-in" method="dialog" id="f-user">
+  <h2>New stockist account</h2>
+  <div class="split2"><div class="field"><label>Business name *</label><input name="business_name" required></div><div class="field"><label>Contact name</label><input name="contact_name"></div></div>
+  <div class="split2"><div class="field"><label>Email *</label><input name="email" type="email" required></div><div class="field"><label>Phone</label><input name="phone"></div></div>
+  <div class="split3"><div class="field"><label>State</label><select name="state"><option value="">—</option><option>NSW</option><option>VIC</option><option>QLD</option><option>SA</option><option>WA</option><option>TAS</option><option>NT</option><option>ACT</option><option>NZ</option></select></div><div class="field"><label>Region</label><input name="region"></div><div class="field"><label>Tier</label><select name="tier" id="u-tier"></select></div></div>
+  <div class="split2"><div class="field"><label>Temporary password * (10+ characters)</label><input name="password" minlength="10" required></div><div class="field"><label>Role</label><select name="role"><option value="stockist">Stockist</option><option value="admin">Admin (THJP staff)</option></select></div></div>
+  <label class="inline-check"><input type="checkbox" name="send_welcome" checked> Email them a welcome message (no password included)</label>
+  <p class="muted-s">Give them the temporary password by phone or text. They&rsquo;ll set up two-factor on first sign-in.</p>
+  <div class="modal-actions"><button class="btn ghost-dark small" value="cancel" formnovalidate>Cancel</button><button class="btn small" value="ok">Create account</button></div>
+</form></dialog>
+
+<dialog class="modal" id="d-res"><form class="modal-in" method="dialog" id="f-res">
+  <h2>Add resource</h2>
+  <div class="field"><label>Title *</label><input name="title" required></div>
+  <div class="field"><label>Description</label><input name="description"></div>
+  <div class="split2"><div class="field"><label>Brand</label><input name="brand" list="brand-list"></div>
+  <div class="field"><label>Category</label><select name="category"><option value="sds">Safety Data Sheet</option><option value="spec-sheet">Spec sheet</option><option value="price-list">Price list</option><option value="marketing">Marketing / POS</option><option value="training">Training</option><option value="product-images">Product images</option><option value="general">General</option></select></div></div>
+  <div class="field"><label>Upload a file</label><input name="file" type="file"></div>
+  <div class="field"><label>…or paste a link</label><input name="link" type="url" placeholder="https://"></div>
+  <div class="modal-actions"><button class="btn ghost-dark small" value="cancel" formnovalidate>Cancel</button><button class="btn small" value="ok">Save</button></div>
+</form></dialog>
+<datalist id="brand-list"></datalist>
+
+<script>
+(function () {
+  var api = P.api, esc = P.esc, money = P.money, $ = P.$, $all = P.$all;
+  var tiers = [], profiles = [];
+
+  P.guard({ admin: true, active: 'admin.html' }).then(function () {
+    $all('.tabs button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        $all('.tabs button').forEach(function (x) { x.classList.toggle('on', x === b); });
+        $all('[data-panel]').forEach(function (p) { p.hidden = p.dataset.panel !== b.dataset.tab; });
+      });
+    });
+    api.tiers().then(function (t) { tiers = t; $('#u-tier').innerHTML = t.map(function (x) { return '<option value="' + x.tier + '">' + esc(x.label) + '</option>'; }).join(''); loadAll(); });
+  });
+
+  function loadAll() { loadOrders(); loadUsers(); loadProducts(); loadTiers(); loadResources(); }
+  function tierOpts(sel) { return tiers.map(function (t) { return '<option value="' + t.tier + '"' + (t.tier === sel ? ' selected' : '') + '>' + esc(t.label) + '</option>'; }).join(''); }
+
+  /* ── orders ── */
+  var orders = [];
+  function loadOrders() {
+    api.allOrders().then(function (o) { orders = o; drawOrders(); }).catch(function (e) { $('#o-list').innerHTML = '<p class="empty">' + esc(e.message) + '</p>'; });
+  }
+  $('#o-filter').addEventListener('change', drawOrders);
+  function drawOrders() {
+    var f = $('#o-filter').value;
+    var open = orders.filter(function (o) { return o.status !== 'shipped' && o.status !== 'cancelled'; });
+    var c = $('#c-orders'); c.hidden = !open.length; c.textContent = open.length;
+    var list = f === 'open' ? open : f === 'all' ? orders : orders.filter(function (o) { return o.status === f; });
+    if (!list.length) { $('#o-list').innerHTML = '<p class="empty">No orders here.</p>'; return; }
+    $('#o-list').innerHTML = list.map(function (o) {
+      var s = o.stockist || {};
+      return '<div class="ocard"><button class="ohead"><span><b>' + esc(o.order_number) + ' · ' + esc(s.business_name || s.email) + '</b><small>PO ' + esc(o.po_number) + ' · ' + P.date(o.created_at) + '</small></span>' +
+        '<span class="hide-s"><b>' + money(o.total_inc_gst_aud) + '</b><small>' + o.total_qty + ' units · ' + esc((tiers.find(function (t) { return t.tier === o.tier; }) || {}).label || '') + '</small></span><span class="hide-s"><small>' + esc([s.state, s.region].filter(Boolean).join(' · ')) + '</small></span>' + P.statusChip(o.status) + '</button>' +
+        '<div class="obody" hidden><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Product</th><th>Size</th><th class="num">Unit</th><th class="num">Qty</th><th class="num">Total</th></tr></thead><tbody>' +
+        o.items.map(function (i) { return '<tr><td>' + esc(i.product_name) + '<div class="sku">' + esc(i.brand || '') + ' · ' + esc(i.sku) + '</div></td><td>' + esc(i.size || '—') + '</td><td class="num">' + money(i.unit_price_aud) + '</td><td class="num">' + i.qty + '</td><td class="num">' + money(i.line_total_aud) + '</td></tr>'; }).join('') +
+        '</tbody></table></div>' + (o.notes ? '<p class="muted-s"><b>Stockist notes:</b> ' + esc(o.notes) + '</p>' : '') +
+        '<p class="muted-s">Contact: ' + esc(s.contact_name || '') + ' · <a href="mailto:' + esc(s.email) + '">' + esc(s.email) + '</a>' + (s.phone ? ' · ' + esc(s.phone) : '') + '</p>' +
+        '<div class="split3"><div class="field"><label>Status</label><select data-k="status">' + Object.keys(P.STATUS).map(function (k) { return '<option value="' + k + '"' + (k === o.status ? ' selected' : '') + '>' + P.STATUS[k] + '</option>'; }).join('') + '</select></div>' +
+        '<div class="field"><label>Shipping $ (blank = TBC)</label><input data-k="shipping_aud" type="number" step="0.01" min="0" value="' + (o.shipping_aud == null ? '' : o.shipping_aud) + '"></div>' +
+        '<div class="field"><label>Tracking</label><input data-k="tracking" value="' + esc(o.tracking || '') + '"></div></div>' +
+        '<div class="field"><label>Internal notes (never shown to the stockist)</label><textarea data-k="admin_notes" rows="2">' + esc(o.admin_notes || '') + '</textarea></div>' +
+        '<div class="row-actions"><button class="btn small" data-save="' + o.id + '">Save</button><label class="inline-check"><input type="checkbox" data-email checked> Email the stockist if the status changes</label></div></div></div>';
+    }).join('');
+    $all('#o-list .ohead').forEach(function (h) { h.addEventListener('click', function () { h.nextElementSibling.hidden = !h.nextElementSibling.hidden; }); });
+    $all('[data-save]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var box = b.closest('.obody'), id = +b.dataset.save, o = orders.find(function (x) { return x.id === id; });
+        var g = function (k) { return box.querySelector('[data-k="' + k + '"]').value; };
+        var ship = g('shipping_aud');
+        var patch = { status: g('status'), shipping_aud: ship === '' ? null : Number(ship), tracking: g('tracking').trim() || null };
+        var changed = patch.status !== o.status;
+        b.disabled = true;
+        api.updateOrder(id, patch, g('admin_notes')).then(function () {
+          if (changed && box.querySelector('[data-email]').checked) api.notify(id, 'status_changed');
+          P.toast(o.order_number + ' saved' + (changed ? ' · now ' + P.STATUS[patch.status] : ''));
+          loadOrders();
+        }).catch(function (e) { P.toast(e.message, 'error'); b.disabled = false; });
+      });
+    });
+  }
+
+  /* ── stockists ── */
+  function loadUsers() {
+    api.profiles().then(function (p) {
+      profiles = p;
+      var pending = p.filter(function (x) { return !x.approved; }).length;
+      var c = $('#c-pending'); c.hidden = !pending; c.textContent = pending;
+      $('#u-tbl tbody').innerHTML = p.map(function (u) {
+        return '<tr data-id="' + esc(u.id) + '"><td><input data-k="business_name" value="' + esc(u.business_name || '') + '" placeholder="Business"><div class="sku">' + esc(u.email) + '</div></td>' +
+          '<td><input data-k="contact_name" value="' + esc(u.contact_name || '') + '" placeholder="Name"><input data-k="phone" value="' + esc(u.phone || '') + '" placeholder="Phone" style="margin-top:6px"></td>' +
+          '<td><select data-k="state"><option value="">—</option>' + ['NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'NT', 'ACT', 'NZ'].map(function (s) { return '<option' + (s === u.state ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '</select><input data-k="region" value="' + esc(u.region || '') + '" placeholder="Region" style="margin-top:6px"></td>' +
+          '<td><select data-k="tier">' + tierOpts(u.tier) + '</select></td>' +
+          '<td><select data-k="role"><option value="stockist"' + (u.role === 'stockist' ? ' selected' : '') + '>Stockist</option><option value="admin"' + (u.role === 'admin' ? ' selected' : '') + '>Admin</option></select></td>' +
+          '<td><label class="inline-check"><input type="checkbox" data-k="approved"' + (u.approved ? ' checked' : '') + '> ' + (u.approved ? '<span class="badge-s ok">Yes</span>' : '<span class="badge-s warn">Pending</span>') + '</label></td>' +
+          '<td><div class="row-actions"><button class="btn small" data-act="save">Save</button><button class="btn small ghost-dark" data-act="mfa">Reset 2FA</button></div></td></tr>';
+      }).join('');
+      $all('#u-tbl [data-act]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var tr = b.closest('tr'), id = tr.dataset.id;
+          if (b.dataset.act === 'mfa') {
+            if (!confirm('Reset two-factor for this account? They will set it up again at their next sign-in.')) return;
+            api.resetMfa(id).then(function (r) { P.toast(r.message || 'Two-factor reset.'); }).catch(function (e) { P.toast(e.message, 'error'); });
+            return;
+          }
+          var v = function (k) { var el = tr.querySelector('[data-k="' + k + '"]'); return el.type === 'checkbox' ? el.checked : el.value; };
+          api.updateProfile(id, { business_name: v('business_name') || null, contact_name: v('contact_name') || null, phone: v('phone') || null, state: v('state') || null, region: v('region') || null, tier: +v('tier'), role: v('role'), approved: v('approved') })
+            .then(function () { P.toast('Account saved'); loadUsers(); }).catch(function (e) { P.toast(e.message, 'error'); });
+        });
+      });
+    });
+  }
+  $('#b-new-user').addEventListener('click', function () { $('#f-user').reset(); $('#d-user').showModal(); });
+  $('#f-user').addEventListener('submit', function (e) {
+    if (e.submitter && e.submitter.value === 'cancel') return;
+    e.preventDefault();
+    var fd = new FormData(e.target), payload = {};
+    fd.forEach(function (v, k) { payload[k] = v; });
+    payload.send_welcome = !!fd.get('send_welcome'); payload.tier = +payload.tier; payload.approved = true;
+    api.createUser(payload).then(function () { $('#d-user').close(); P.toast('Account created for ' + payload.email); loadUsers(); })
+      .catch(function (x) { P.toast(x.message, 'error'); });
+  });
+
+  /* ── products ── */
+  function loadProducts() {
+    api.products(true).then(function (list) {
+      $('#p-tbl thead').innerHTML = '<tr><th>Brand</th><th>SKU</th><th>Product</th><th>Size</th><th class="num">RRP</th>' + tiers.map(function (t) { return '<th class="num">' + esc(t.label) + ' price</th>'; }).join('') + '<th>Sizes (apparel)</th><th>Active</th><th></th></tr>';
+      var brands = []; list.forEach(function (p) { if (brands.indexOf(p.brand) < 0) brands.push(p.brand); });
+      $('#brand-list').innerHTML = brands.map(function (b) { return '<option value="' + esc(b) + '">'; }).join('');
+      var cols = 8 + tiers.length;
+      $('#p-tbl tbody').innerHTML = P.groupBy(list, 'brand').map(function (g) {
+        return '<tr class="brand-row"><td colspan="' + cols + '">' + esc(g.key) + '<span>' + g.items.length + ' products</span></td></tr>' + g.items.map(prodRow).join('');
+      }).join('') || '<tr><td colspan="' + cols + '" class="empty">No products yet.</td></tr>';
+      bindProducts();
+    });
+  }
+  function prodRow(p) {
+    return '<tr data-id="' + (p.id || '') + '"><td><input data-k="brand" list="brand-list" value="' + esc(p.brand || '') + '"></td><td><input data-k="sku" value="' + esc(p.sku || '') + '" style="min-width:120px"></td><td><input data-k="product_name" value="' + esc(p.product_name || '') + '" style="min-width:200px"></td><td><input data-k="size" value="' + esc(p.size || '') + '" style="min-width:80px"></td>' +
+      '<td class="num"><input data-k="rrp_aud" type="number" step="0.01" min="0" value="' + (p.rrp_aud == null ? '' : p.rrp_aud) + '" style="width:100px"></td>' +
+      tiers.map(function (t) { var tp = P.tierPrice(p.rrp_aud, t.discount_pct); return '<td class="num muted-s">' + (tp == null ? '—' : money(tp)) + '</td>'; }).join('') +
+      '<td><input data-k="available_sizes" value="' + esc(p.has_sizes ? p.available_sizes || '' : '') + '" placeholder="e.g. S,M,L" style="min-width:110px"></td>' +
+      '<td><input type="checkbox" data-k="active"' + (p.active !== false ? ' checked' : '') + '></td>' +
+      '<td><div class="row-actions"><button class="btn small" data-act="save">Save</button>' + (p.id ? '<button class="btn small danger" data-act="del">Delete</button>' : '') + '</div></td></tr>';
+  }
+  function bindProducts() {
+    $all('#p-tbl [data-act]').forEach(function (b) {
+      if (b.dataset.bound) return; b.dataset.bound = 1;
+      b.addEventListener('click', function () {
+        var tr = b.closest('tr'), id = tr.dataset.id ? +tr.dataset.id : null;
+        if (b.dataset.act === 'del') {
+          if (!confirm('Delete this product? Past orders keep their copy of it. Untick "Active" instead to just hide it.')) return;
+          api.deleteProduct(id).then(function () { P.toast('Product deleted'); loadProducts(); }).catch(function (e) { P.toast(e.message, 'error'); });
+          return;
+        }
+        var v = function (k) { var el = tr.querySelector('[data-k="' + k + '"]'); return el.type === 'checkbox' ? el.checked : el.value.trim(); };
+        var sizes = v('available_sizes').replace(/\s+/g, '');
+        var row = { id: id, brand: v('brand'), sku: v('sku').toUpperCase(), product_name: v('product_name'), size: v('size') || null, rrp_aud: v('rrp_aud') === '' ? null : Number(v('rrp_aud')), has_sizes: !!sizes, available_sizes: sizes || null, active: v('active') };
+        if (!row.brand || !row.sku || !row.product_name) { P.toast('Brand, SKU and product name are required.', 'error'); return; }
+        api.saveProduct(row).then(function () { P.toast(row.product_name + ' saved'); loadProducts(); }).catch(function (e) { P.toast(e.message, 'error'); });
+      });
+    });
+  }
+  $('#b-new-prod').addEventListener('click', function () {
+    var tb = $('#p-tbl tbody'); var tmp = document.createElement('tbody'); tmp.innerHTML = prodRow({ brand: '', active: true });
+    tb.insertBefore(tmp.firstChild, tb.firstChild); bindProducts(); tb.querySelector('input').focus();
+  });
+
+  /* ── tiers ── */
+  function loadTiers() {
+    $('#t-tbl tbody').innerHTML = tiers.map(function (t) {
+      return '<tr data-tier="' + t.tier + '"><td>' + t.tier + '</td><td><input data-k="label" value="' + esc(t.label) + '"></td><td class="num"><input data-k="discount_pct" type="number" step="0.5" min="0" max="90" value="' + Number(t.discount_pct) + '" style="width:90px"></td><td class="num"><input data-k="min_order_qty" type="number" min="1" value="' + t.min_order_qty + '" style="width:90px"></td><td><input type="checkbox" data-k="free_shipping"' + (t.free_shipping ? ' checked' : '') + '></td><td><textarea data-k="benefits" rows="3" style="min-width:260px">' + esc(t.benefits || '') + '</textarea></td><td><button class="btn small">Save</button></td></tr>';
+    }).join('');
+    $all('#t-tbl button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var tr = b.closest('tr'), v = function (k) { var el = tr.querySelector('[data-k="' + k + '"]'); return el.type === 'checkbox' ? el.checked : el.value; };
+        var row = { tier: +tr.dataset.tier, label: v('label'), discount_pct: Number(v('discount_pct')), min_order_qty: Math.max(1, parseInt(v('min_order_qty'), 10) || 1), free_shipping: v('free_shipping'), benefits: v('benefits') };
+        api.saveTier(row).then(function () { P.toast(row.label + ' saved'); return api.tiers(); }).then(function (t) { tiers = t; loadProducts(); }).catch(function (e) { P.toast(e.message, 'error'); });
+      });
+    });
+  }
+
+  /* ── resources ── */
+  var CATS = { sds: 'Safety Data Sheet', 'spec-sheet': 'Spec sheet', 'price-list': 'Price list', marketing: 'Marketing / POS', training: 'Training', 'product-images': 'Product images', general: 'General' };
+  function loadResources() {
+    api.resources().then(function (list) {
+      $('#r-tbl tbody').innerHTML = list.map(function (r) {
+        return '<tr data-id="' + r.id + '"><td><b>' + esc(r.title) + '</b><div class="sku">' + esc(r.description || '') + '</div></td><td>' + esc(r.brand || '—') + '</td><td>' + esc(CATS[r.category] || r.category) + '</td><td class="sku">' + esc(String(r.file_path).slice(0, 60)) + '</td><td><button class="btn small danger">Delete</button></td></tr>';
+      }).join('') || '<tr><td colspan="5" class="empty">No resources yet.</td></tr>';
+      $all('#r-tbl .danger').forEach(function (b) {
+        b.addEventListener('click', function () {
+          if (!confirm('Remove this resource from the portal?')) return;
+          api.deleteResource(+b.closest('tr').dataset.id).then(function () { P.toast('Removed'); loadResources(); }).catch(function (e) { P.toast(e.message, 'error'); });
+        });
+      });
+    });
+  }
+  $('#b-new-res').addEventListener('click', function () { $('#f-res').reset(); $('#d-res').showModal(); });
+  $('#f-res').addEventListener('submit', function (e) {
+    if (e.submitter && e.submitter.value === 'cancel') return;
+    e.preventDefault();
+    var f = e.target.elements, file = f['file'].files[0], link = f['link'].value.trim();
+    if (!file && !link) { P.toast('Upload a file or paste a link.', 'error'); return; }
+    api.saveResource({ title: f['title'].value.trim(), description: f['description'].value.trim(), brand: f['brand'].value.trim(), category: f['category'].value, file_path: link }, file)
+      .then(function () { $('#d-res').close(); P.toast('Resource saved'); loadResources(); }).catch(function (x) { P.toast(x.message, 'error'); });
+  });
+})();
+</script>
+</body>
+</html>

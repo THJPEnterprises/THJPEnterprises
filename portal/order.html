@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0A1711">
+<title>Place an order — THJP Stockist Portal</title>
+<link rel="icon" type="image/png" href="../images/thjp-badge-64.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,100..125,400..900;1,100..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=202611051711">
+<link rel="stylesheet" href="../css/portal.css?v=202611051711">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../js/portal-config.js?v=202611051711"></script>
+<script src="../js/portal.js?v=202611051711"></script>
+</head>
+<body class="portal">
+<div id="gate" class="gate"><div class="gate-card"><p>Loading…</p></div></div>
+<main id="app" class="pmain" hidden>
+  <div class="phead">
+    <div><span class="eyebrow">Order on account</span><h1>Place an order</h1></div>
+    <div id="tier-pill"></div>
+  </div>
+
+  <div class="order-layout">
+    <section class="card">
+      <div class="card-head"><div><h2>Products</h2><p class="card-sub" style="margin:0">Enter quantities. Prices include GST with your tier margin applied. Mix any products to reach your minimum.</p></div></div>
+      <div class="tbl-wrap"><table class="tbl" id="lines">
+        <thead><tr><th>Product</th><th>Size</th><th class="num">Your price</th><th class="num">Qty</th><th class="num">Line total</th></tr></thead>
+        <tbody><tr><td colspan="5" class="empty">Loading…</td></tr></tbody>
+      </table></div>
+    </section>
+
+    <aside class="card summary">
+      <h2>Order summary</h2>
+      <div class="moq" id="moq"><span id="moq-text">0 of 0 units</span><div class="bar"><i id="moq-bar" style="width:0"></i></div></div>
+      <div class="row"><span>Products (inc. GST)</span><span id="s-total">$0.00</span></div>
+      <div class="row"><span>GST included</span><span id="s-gst">$0.00</span></div>
+      <div class="row"><span>Shipping</span><span id="s-ship">Quoted after you order</span></div>
+      <div class="row total"><span>Total</span><span id="s-grand">$0.00</span></div>
+      <div class="field" style="margin-top:16px"><label for="po">Your PO number *</label><input id="po" maxlength="60" required placeholder="e.g. PO-1043"></div>
+      <div class="field"><label for="notes">Notes (optional)</label><textarea id="notes" rows="3" maxlength="2000" placeholder="Delivery instructions, timing…"></textarea></div>
+      <button class="btn" id="submit" disabled style="width:100%;justify-content:center">Submit order</button>
+      <p class="muted-s" style="margin:12px 0 0">No payment is taken here. We&rsquo;ll confirm stock and shipping, then invoice your account.</p>
+    </aside>
+  </div>
+</main>
+
+<script>
+(function () {
+  var api = P.api, esc = P.esc, money = P.money, $ = P.$, $all = P.$all;
+  var tier, lines = [];
+  P.guard({ active: 'order.html' }).then(function (me) {
+    Promise.all([api.tiers(), api.products()]).then(function (r) {
+      tier = r[0].find(function (t) { return t.tier === me.tier; }) || r[0][0];
+      $('#tier-pill').innerHTML = '<span class="tier-pill"><b>' + esc(tier.label) + '</b> · ' + Number(tier.discount_pct) + '% margin · min ' + tier.min_order_qty + ' units' + (tier.free_shipping ? ' · free shipping' : '') + '</span>';
+      if (tier.free_shipping) $('#s-ship').textContent = 'Free (' + tier.label + ')';
+      var products = r[1].filter(function (p) { return p.rrp_aud != null; });
+      products.forEach(function (p) {
+        var price = P.tierPrice(p.rrp_aud, tier.discount_pct);
+        var sizes = p.has_sizes && p.available_sizes ? p.available_sizes.split(',').map(function (s) { return s.trim(); }).filter(Boolean) : [null];
+        sizes.forEach(function (sz) { lines.push({ brand: p.brand, sku: p.sku, name: p.product_name, size: sz, pack: p.size, price: price, qty: 0 }); });
+      });
+      var body = $('#lines tbody');
+      if (!lines.length) { body.innerHTML = '<tr><td colspan="5" class="empty">No products are available to order yet.</td></tr>'; return; }
+      var i = 0;
+      body.innerHTML = P.groupBy(lines, 'brand').map(function (g) {
+        return '<tr class="brand-row"><td colspan="5">' + esc(g.key) + '</td></tr>' + g.items.map(function (l) {
+          l.idx = i++;
+          return '<tr><td>' + esc(l.name) + (l.size ? ' <span class="badge-s">Size ' + esc(l.size) + '</span>' : '') + '<div class="sku">' + esc(l.sku) + '</div></td><td>' + esc(l.pack || '—') + '</td>' +
+            '<td class="num">' + money(l.price) + '</td><td class="num"><input class="qty" type="number" min="0" max="9999" step="1" value="0" inputmode="numeric" data-i="' + l.idx + '" aria-label="Quantity of ' + esc(l.name + (l.size ? ' size ' + l.size : '')) + '"></td>' +
+            '<td class="num" data-t="' + l.idx + '">$0.00</td></tr>';
+        }).join('');
+      }).join('');
+      $all('.qty').forEach(function (inp) { inp.addEventListener('input', recalc); inp.addEventListener('focus', function () { inp.select(); }); });
+      recalc();
+    });
+  });
+
+  function recalc() {
+    var total = 0, qty = 0;
+    $all('.qty').forEach(function (inp) {
+      var l = lines[+inp.dataset.i]; l.qty = Math.max(0, Math.min(9999, parseInt(inp.value, 10) || 0));
+      var t = Math.round(l.price * l.qty * 100) / 100; total += t; qty += l.qty;
+      $('[data-t="' + l.idx + '"]').textContent = money(t);
+    });
+    var min = tier ? tier.min_order_qty : 1, ok = qty >= min && qty > 0;
+    $('#moq-text').innerHTML = '<b>' + qty + '</b> of ' + min + ' units minimum' + (ok ? ' ✓' : qty ? ' · add ' + (min - qty) + ' more' : '');
+    $('#moq-bar').style.width = Math.min(100, qty / min * 100) + '%';
+    $('#moq').classList.toggle('ok', ok);
+    $('#s-total').textContent = money(total);
+    $('#s-gst').textContent = money(total / 11);
+    $('#s-grand').textContent = money(total) + (tier && tier.free_shipping ? '' : ' + shipping');
+    $('#submit').disabled = !ok;
+    return { qty: qty, ok: ok };
+  }
+
+  $('#submit').addEventListener('click', function () {
+    var st = recalc(), po = $('#po').value.trim(), b = $('#submit');
+    if (!po) { P.toast('Enter your PO number first.', 'error'); $('#po').focus(); return; }
+    if (!st.ok) return;
+    var items = lines.filter(function (l) { return l.qty > 0; }).map(function (l) { return { sku: l.sku, size: l.size, qty: l.qty }; });
+    b.disabled = true; b.textContent = 'Submitting…';
+    api.placeOrder(po, $('#notes').value.trim(), items).then(function (order) {
+      api.notify(order.id, 'order_placed');
+      P.toast('Order ' + order.order_number + ' submitted. Thank you!');
+      setTimeout(function () { location.href = 'orders.html#o' + order.id; }, 1300);
+    }).catch(function (e) {
+      P.toast(e.message || 'Order could not be submitted.', 'error');
+      b.disabled = false; b.textContent = 'Submit order';
+    });
+  });
+})();
+</script>
+</body>
+</html>

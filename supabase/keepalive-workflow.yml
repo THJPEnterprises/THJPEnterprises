@@ -1,0 +1,28 @@
+# Keeps the THJP portal's free Supabase project awake.
+# Supabase pauses free projects after 7 days without database activity;
+# this runs twice a week and makes one tiny read request.
+# It reads the project URL + publishable key from js/portal-config.js.
+name: Supabase keep-alive
+on:
+  schedule:
+    - cron: '23 21 * * 0,3'   # Mon & Thu ~8am Sydney
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ping Supabase
+        run: |
+          URL=$(grep -oP "SUPABASE_URL:\s*'\K[^']+" js/portal-config.js || true)
+          KEY=$(grep -oP "SUPABASE_ANON_KEY:\s*'\K[^']+" js/portal-config.js || true)
+          if [ -z "$URL" ] || [ -z "$KEY" ]; then echo "Portal not configured yet — nothing to ping."; exit 0; fi
+          for i in 1 2 3; do
+            CODE=$(curl -s -o /dev/null -w '%{http_code}' "$URL/rest/v1/tier_settings?select=tier&limit=1" -H "apikey: $KEY")
+            echo "Attempt $i → HTTP $CODE"
+            if [ "$CODE" -ge 200 ] && [ "$CODE" -lt 300 ]; then exit 0; fi
+            sleep 20
+          done
+          echo "::error::Supabase ping failed — the project may be paused. Restore it in the Supabase dashboard."; exit 1

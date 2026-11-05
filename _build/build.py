@@ -35,16 +35,18 @@ MARK = '<img class="brand-badge" src="{root}images/thjp-badge-64.png" srcset="{r
 
 # ===================== SITE SETTINGS — fill these in, then run: python3 _build/build.py =====================
 SETTINGS = {
+    "PORTAL_LIVE": False,  # set True once the Supabase project is connected (js/portal-config.js)
     "FORMSPREE_ID": "xnppwgwe",  # Formspree form ID — the part after formspree.io/f/ (e.g. "xyzabcde"). Empty = form opens visitor's email app.
     "PHONE":     "0414 643 100",   # e.g. "+61 2 0000 0000" — shown in footer, contact page and Google data. Empty = hidden.
     "ADDRESS":   "PO Box 12, Mount Colah NSW 2079",   # e.g. "PO Box 12, Mount Colah NSW 2079" — empty = hidden.
     "LINKEDIN":  "",   # e.g. "https://www.linkedin.com/company/thjp-enterprises" — empty = hidden.
-    "CF_TOKEN":  "",   # Cloudflare Web Analytics token (free, cookie-free). Empty = no analytics.
+    "CF_TOKEN":  "",
+    "WHERE_TO_BUY": "https://vinniesoilaustralia.com/pages/retail-network.html", # public stockist list   # Cloudflare Web Analytics token (free, cookie-free). Empty = no analytics.
 }
 # ==========================================================================================================
 
-NAV = [("index.html", "Home", ""), ("about.html", "About", "pages/"), ("brands.html", "Brands", "pages/"),
-       ("products.html", "Range", "pages/"), ("resources.html", "Resources", "pages/"), ("contact.html", "Contact", "pages/")]
+NAV = [("about.html", "About", "pages/"), ("brands.html", "Brands", "pages/"),
+       ("products.html", "Range", "pages/"), ("resources.html", "Resources", "pages/"), ("news.html", "News", "pages/"), ("contact.html", "Contact", "pages/")]
 
 def href(root, file, sub):
     if file == "index.html":
@@ -53,10 +55,15 @@ def href(root, file, sub):
 
 def header(root, light=False):
     links = "".join(f'<li><a href="{href(root,f,s)}" data-page="{f}">{t}</a></li>' for f, t, s in NAV)
-    mlinks = "".join(f'<a href="{href(root,f,s)}" data-page="{f}">{t}</a>' for f, t, s in NAV)
+    mlinks = f'<a href="{root}index.html" data-page="index.html">Home</a>' + "".join(f'<a href="{href(root,f,s)}" data-page="{f}">{t}</a>' for f, t, s in NAV)
     cls = "site-header on-light" if light else "site-header"
+    W = SETTINGS["WHERE_TO_BUY"]
     return f'''<a class="skip" href="#main">Skip to content</a>
 <header class="{cls}">
+  <div class="topbar"><div class="wrap topbar-in">
+    <span class="tb-msg"><span class="tb-long">Trade &amp; wholesale only.</span> Looking to buy? <a href="{W}" target="_blank" rel="noopener">Find a stockist&nbsp;→</a></span>
+    <a class="tb-login" href="{root}portal/login.html">{ICONS['lock']}<span>Stockist login</span></a>
+  </div></div>
   <div class="wrap nav">
     <a class="brand" href="{root}index.html" aria-label="THJP Enterprises home">{MARK.format(root=root)}<span class="brand-text"><b>THJP</b><span>ENTERPRISES</span></span></a>
     <nav aria-label="Main"><ul class="nav-links">{links}</ul></nav>
@@ -64,7 +71,7 @@ def header(root, light=False):
     <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
   </div>
 </header>
-<div class="mobile-menu" id="mobile-menu">{mlinks}<a class="btn" href="{root}pages/contact.html?type=retailer">Trade enquiries {ICONS['arrow']}</a></div>'''
+<div class="mobile-menu" id="mobile-menu">{mlinks}<a href="{root}pages/portal.html" data-page="portal.html">Stockist portal</a><a class="btn" href="{root}pages/contact.html?type=retailer">Trade enquiries {ICONS['arrow']}</a></div>'''
 
 def footer(root):
     S = SETTINGS
@@ -86,11 +93,13 @@ def footer(root):
         <li><a href="{root}pages/brands.html">Brand portfolio</a></li>
         <li><a href="{root}pages/products.html">Product range</a></li>
         <li><a href="{root}pages/resources.html">Trade resources</a></li>
+        <li><a href="{root}pages/news.html">News</a></li>
         <li><a href="{root}pages/contact.html">Contact</a></li>
         <li><a href="{root}pages/privacy.html">Privacy policy</a></li></ul></div>
       <div><h4>Work with us</h4><ul>
         <li><a href="{root}pages/contact.html?type=retailer">Become a stockist</a></li>
         <li><a href="{root}pages/contact.html?type=brand">Distribute your brand</a></li>
+        <li><a href="{root}pages/portal.html">Stockist portal</a></li>
         <li><a href="{root}pages/contact.html?type=wholesale">Existing accounts</a></li>
         <li><a href="mailto:info@thjpenterprises.com">info@thjpenterprises.com</a></li>{extra_contact}</ul></div>
       <div><h4>Group brands</h4><ul>
@@ -137,6 +146,11 @@ def page(name, title, desc, root, body, light=False):
     ld = org_ld() if name == 'index.html' else ''
     if SETTINGS["CF_TOKEN"]:
         ld += '\n<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon=\'{"token": "' + SETTINGS["CF_TOKEN"] + '"}\'></script>'
+    if not SETTINGS["PORTAL_LIVE"]:
+        body = re.sub(r'<a class="btn" href="\{\{PORTAL_URL\}\}">[^<]*\{\{icon:lock\}\}</a>', '<span class="chip hot">Portal coming soon</span>', body)
+        body = re.sub(r'<a class="btn" href="\{\{PORTAL_URL\}\}">[^<]*<svg[^<]*(?:<[^>]*>)*?</svg></a>', '<span class="chip hot">Portal coming soon</span>', body)
+        body = body.replace("Sign in with your stockist account, or apply for one today.", "The portal is opening soon. Apply for a trade account now and you&rsquo;ll be among the first to get access.").replace("<h2>Ready to<br>order?</h2>", "<h2>Opening<br>soon.</h2>")
+    body = body.replace("{{PORTAL_URL}}", root + "portal/login.html").replace("{{WHERE_TO_BUY}}", SETTINGS["WHERE_TO_BUY"])
     body = body.replace("<!--EXTRA_CHANNELS-->", extra_channels()).replace("{{FORMSPREE_ID}}", SETTINGS["FORMSPREE_ID"])
     return f'''<!DOCTYPE html>
 <html lang="en-AU">
@@ -182,6 +196,10 @@ PAGES = [
   "The trade range distributed by THJP Enterprises — Vinnie's Oil hardwax oils and waxes, plus woodturning, pen-making, hand tool and workshop categories."),
  ("pages/resources.html", "../", "Trade Resources — THJP Enterprises",
   "Safety Data Sheets, application guides, catalogues and trade price lists for THJP Enterprises stockists."),
+ ("pages/portal.html", "../", "Stockist Portal — THJP Enterprises",
+  "The THJP Enterprises stockist portal: live tier pricing, online ordering on account, order history and dealer resources for approved retailers."),
+ ("pages/news.html", "../", "News — THJP Enterprises",
+  "News from THJP Enterprises: brand partnerships, new ranges and updates for our retail network."),
  ("pages/privacy.html", "../", "Privacy Policy — THJP Enterprises",
   "How THJP Enterprises Pty Ltd collects, uses and protects personal information."),
  ("pages/contact.html", "../", "Trade Enquiries — THJP Enterprises",
@@ -200,4 +218,15 @@ import datetime
 today = datetime.date.today().isoformat()
 urls = "".join(f"  <url><loc>{SITE}{'' if o == 'index.html' else o}</loc><lastmod>{today}</lastmod></url>\n" for o, *_ in PAGES if o != "404.html")
 (OUT / "sitemap.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
-(OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE}sitemap.xml\n")
+(OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nDisallow: /portal/\nSitemap: {SITE}sitemap.xml\n")
+
+# ── Stockist portal pages (/portal/) ──
+head_tpl = (HERE / "portal_head.html").read_text()
+(OUT / "portal").mkdir(exist_ok=True)
+for src in sorted((HERE / "portal").glob("*.html")):
+    body = src.read_text()
+    m = re.match(r"<!--TITLE:(.*?)-->\n", body)
+    title = m.group(1) if m else "Portal"
+    body = body[m.end():] if m else body
+    (OUT / "portal" / src.name).write_text(head_tpl.replace("{{TITLE}}", title).replace("{{VER}}", VER) + body)
+    print("built portal/" + src.name)

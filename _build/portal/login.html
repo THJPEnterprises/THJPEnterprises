@@ -1,0 +1,141 @@
+<!--TITLE:Sign in-->
+<body class="portal">
+<div class="auth-wrap">
+  <a class="auth-back" href="../pages/portal.html">← Back to thjpenterprises.com</a>
+  <div class="auth-card">
+    <div class="auth-head">
+      <img src="../images/thjp-badge-256.png" alt="THJP Enterprises" width="64" height="64">
+      <div><small>THJP Enterprises</small><b>Stockist portal</b></div>
+    </div>
+
+    <div class="msg err" id="err" role="alert"></div>
+    <div class="msg info" id="info" role="status"></div>
+
+    <!-- 1. sign in -->
+    <form id="f-login" novalidate>
+      <h1>Sign in</h1>
+      <p class="sub">Trade pricing, ordering and dealer resources for approved stockists.</p>
+      <div class="field"><label for="email">Email</label><input id="email" type="email" autocomplete="username" required></div>
+      <div class="field"><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" required></div>
+      <button class="btn" type="submit" id="b-login">Sign in</button>
+      <p class="auth-foot">Forgotten your password? <button type="button" class="linkish" id="b-reset">Reset it</button><br>
+      Not a stockist yet? <a href="../pages/contact.html?type=retailer">Apply for a trade account</a></p>
+    </form>
+
+    <!-- 2. first sign-in: set up two-factor -->
+    <form id="f-enroll" novalidate hidden>
+      <h1>Secure your account</h1>
+      <p class="steps-note">Every account uses two-factor authentication. Scan this code with an authenticator app (Google Authenticator, Microsoft Authenticator, 1Password or Authy), then enter the 6-digit code it shows.</p>
+      <div class="qr"><img id="qr" alt="QR code for your authenticator app" hidden><div class="qr-ph" id="qr-ph" hidden>Preview mode<br>(no real QR code)</div></div>
+      <p class="steps-note" style="text-align:center">Can&rsquo;t scan? Enter this key in the app instead:</p>
+      <p class="secret" id="secret"></p>
+      <div class="field"><label for="code1">6-digit code</label><input id="code1" class="code-input" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required></div>
+      <button class="btn" type="submit" id="b-enroll">Verify &amp; continue</button>
+    </form>
+
+    <!-- 3. later sign-ins: enter code -->
+    <form id="f-challenge" novalidate hidden>
+      <h1>Enter your code</h1>
+      <p class="sub">Open your authenticator app and enter the current 6-digit code for THJP.</p>
+      <div class="field"><label for="code2">6-digit code</label><input id="code2" class="code-input" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required></div>
+      <button class="btn" type="submit" id="b-challenge">Verify</button>
+      <p class="auth-foot">Lost your phone? Contact <a href="mailto:info@thjpenterprises.com">info@thjpenterprises.com</a> and we&rsquo;ll reset your two-factor.<br><button type="button" class="linkish" id="b-cancel">Use a different account</button></p>
+    </form>
+
+    <!-- 4. arriving from a password-reset email -->
+    <form id="f-recover" novalidate hidden>
+      <h1>Choose a new password</h1>
+      <p class="sub">At least 10 characters.</p>
+      <div class="field"><label for="np1">New password</label><input id="np1" type="password" autocomplete="new-password" minlength="10" required></div>
+      <div class="field"><label for="np2">Confirm new password</label><input id="np2" type="password" autocomplete="new-password" minlength="10" required></div>
+      <button class="btn" type="submit" id="b-recover">Save password</button>
+    </form>
+
+    <!-- not connected yet -->
+    <div id="not-ready" hidden>
+      <h1>Coming soon</h1>
+      <p class="sub">The THJP stockist portal is being set up. To order in the meantime, email <a href="mailto:info@thjpenterprises.com">info@thjpenterprises.com</a>.</p>
+      <a class="btn" href="../pages/portal.html">About the portal</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var api = P.api, $ = P.$;
+  var recovering = /type=recovery/.test(location.hash);
+  var forms = ['f-login', 'f-enroll', 'f-challenge', 'f-recover', 'not-ready'];
+  var factorId = null;
+  function show(id) { forms.forEach(function (f) { $('#' + f).hidden = f !== id; }); }
+  function err(m) { var e = $('#err'); e.textContent = m; e.classList.add('show'); $('#info').classList.remove('show'); }
+  function info(m) { var e = $('#info'); e.textContent = m; e.classList.add('show'); $('#err').classList.remove('show'); }
+  function clear() { $('#err').classList.remove('show'); $('#info').classList.remove('show'); }
+  function busy(btn, on, label) { btn.disabled = on; if (on) { btn.dataset.l = btn.textContent; btn.textContent = label || 'Please wait…'; } else if (btn.dataset.l) btn.textContent = btn.dataset.l; }
+
+  if (!P.configured && !P.demo) { show('not-ready'); return; }
+  if (P.demo) info('Preview mode: sign in with any email and password, then any 6-digit code. Use info@thjpenterprises.com to see the admin view.');
+  if (/reason=idle/.test(location.search)) info('You were signed out after 30 minutes of inactivity. Please sign in again.');
+
+  function afterSignIn() {
+    return api.aal().then(function (aal) {
+      if (aal === 'aal2') { location.href = 'index.html'; return; }
+      return api.verifiedFactor().then(function (fid) {
+        if (fid) { factorId = fid; show('f-challenge'); $('#code2').focus(); return; }
+        return api.enroll().then(function (r) {
+          factorId = r.id;
+          if (r.qr) { $('#qr').src = r.qr; $('#qr').hidden = false; } else { $('#qr-ph').hidden = false; }
+          $('#secret').textContent = r.secret;
+          show('f-enroll'); $('#code1').focus();
+        });
+      });
+    }).catch(function (e) { err('Could not finish signing in: ' + (e.message || e)); show('f-login'); });
+  }
+
+  api.onRecovery(function () { clear(); show('f-recover'); });
+  if (recovering) show('f-recover');
+  api.session().then(function (s) { if (s && !recovering) afterSignIn(); });
+
+  $('#f-login').addEventListener('submit', function (e) {
+    e.preventDefault(); clear();
+    var email = $('#email').value.trim(), pw = $('#pw').value, b = $('#b-login');
+    if (!email || !pw) return err('Enter your email and password.');
+    busy(b, true, 'Signing in…');
+    api.signIn(email, pw).then(afterSignIn).catch(function (x) { err(x.message || 'Sign-in failed.'); }).then(function () { busy(b, false); });
+  });
+
+  function verify(inputId, btnId, msg) {
+    return function (e) {
+      e.preventDefault(); clear();
+      var code = $(inputId).value.replace(/\D/g, ''), b = $(btnId);
+      if (code.length !== 6) return err('Enter the 6-digit code from your app.');
+      busy(b, true, 'Verifying…');
+      api.verify(factorId, code).then(function () { location.href = 'index.html'; })
+        .catch(function () { err(msg); busy(b, false); $(inputId).select(); });
+    };
+  }
+  $('#f-enroll').addEventListener('submit', verify('#code1', '#b-enroll', 'That code didn’t match. Check the app and try the newest code.'));
+  $('#f-challenge').addEventListener('submit', verify('#code2', '#b-challenge', 'Incorrect code. Please try again.'));
+  $('#b-cancel').addEventListener('click', function () { api.signOut().then(function () { clear(); show('f-login'); }); });
+
+  $('#b-reset').addEventListener('click', function () {
+    clear();
+    var email = $('#email').value.trim();
+    if (!email) { err('Enter your email above first, then press "Reset it".'); $('#email').focus(); return; }
+    api.resetPassword(email).then(function () { info('If that email has a portal account, a reset link is on its way. It will bring you back here.'); })
+      .catch(function (x) { err(x.message || 'Could not send the reset email.'); });
+  });
+
+  $('#f-recover').addEventListener('submit', function (e) {
+    e.preventDefault(); clear();
+    var a = $('#np1').value, b2 = $('#np2').value, b = $('#b-recover');
+    if (a.length < 10) return err('Use at least 10 characters.');
+    if (a !== b2) return err('The passwords don’t match.');
+    busy(b, true, 'Saving…');
+    api.updatePassword(a).then(function () { return api.signOut(); }).then(function () {
+      busy(b, false); show('f-login'); info('Password updated. Sign in with your new password.');
+    }).catch(function (x) { busy(b, false); err(x.message || 'Could not update the password.'); });
+  });
+})();
+</script>
+</body>
+</html>
